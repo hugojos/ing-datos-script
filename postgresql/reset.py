@@ -143,7 +143,7 @@ def reset_database():
     # Ejecutar seed.py automáticamente
     import subprocess
     try:
-        subprocess.run(["python", "postgresql/seed.py"], check=True)
+        subprocess.run(["py", "postgresql/seed.py"], check=True)
         print("Datos de ejemplo insertados correctamente (seed.py ejecutado).")
     except Exception as e:
         print(f"[ERROR] No se pudo ejecutar seed.py automáticamente: {e}")

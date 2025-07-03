@@ -37,19 +37,19 @@ def reiniciar_dbs():
     console.print("\n[bold yellow]Reiniciando bases de datos...[/bold yellow]")
     # PostgreSQL
     try:
-        subprocess.run(["python", "postgresql/reset.py"], check=True)
+        subprocess.run(["py", "postgresql/reset.py"], check=True)
         console.print("[bold green]PostgreSQL reiniciada correctamente.[/bold green]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar PostgreSQL: {e}[/bold red]")
     # MongoDB
     try:
-        subprocess.run(["python", "mongo/reset.py"], check=True)
+        subprocess.run(["py", "mongo/reset.py"], check=True)
         console.print("[bold green]MongoDB reiniciada correctamente.[/bold green]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar MongoDB: {e}[/bold red]")
     # Neo4j (placeholder)
     try:
-        # subprocess.run(["python", "neo4j/reset.py"], check=True)
+        # subprocess.run(["py", "neo4j/reset.py"], check=True)
         console.print("[bold yellow]Reset de Neo4j pendiente de implementar.[/bold yellow]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar Neo4j: {e}[/bold red]")

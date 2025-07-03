@@ -10,7 +10,7 @@ def reset_libros():
     print("Colección 'libros' reseteada correctamente.")
     # Ejecutar seed.py automáticamente
     try:
-        subprocess.run(["python", "mongo/seed.py"], check=True)
+        subprocess.run(["py", "mongo/seed.py"], check=True)
         print("Colección 'libros' poblada correctamente (seed.py ejecutado).")
     except Exception as e:
         print(f"[ERROR] No se pudo ejecutar seed.py automáticamente: {e}")
