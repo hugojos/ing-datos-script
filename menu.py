@@ -6,12 +6,10 @@ from rich.text import Text
 # Importar funciones de creación
 from mongo.crear import crear_personaje as crear_personaje_mongo, crear_hechizo as crear_hechizo_mongo, crear_objeto_magico as crear_objeto_magico_mongo, crear_publicacion as crear_publicacion_mongo, crear_criatura_magica as crear_criatura_magica_mongo
 from postgresql.crear import crear_personaje as crear_personaje_postgres, crear_hechizo as crear_hechizo_postgres, crear_objeto_magico as crear_objeto_magico_postgres, crear_publicacion as crear_publicacion_postgres, crear_criatura_magica as crear_criatura_magica_postgres
-from neo4j.crear import crear_personaje as crear_personaje_neo4j, crear_hechizo as crear_hechizo_neo4j, crear_objeto_magico as crear_objeto_magico_neo4j, crear_publicacion as crear_publicacion_neo4j, crear_criatura_magica as crear_criatura_magica_neo4j
 
 # Importar funciones de casos de uso
 from mongo.caso_de_uso import caso_1 as caso_1_mongo, caso_2 as caso_2_mongo, caso_3 as caso_3_mongo, caso_4 as caso_4_mongo, caso_5 as caso_5_mongo, caso_6 as caso_6_mongo
 from postgresql.caso_de_uso import caso_1 as caso_1_postgres, caso_2 as caso_2_postgres, caso_3 as caso_3_postgres, caso_4 as caso_4_postgres, caso_5 as caso_5_postgres, caso_6 as caso_6_postgres
-from neo4j.caso_de_uso import caso_1 as caso_1_neo4j, caso_2 as caso_2_neo4j, caso_3 as caso_3_neo4j, caso_4 as caso_4_neo4j, caso_5 as caso_5_neo4j, caso_6 as caso_6_neo4j
 
 console = Console()
 
@@ -73,31 +71,26 @@ def opcion_crear():
             data = {"nombre": "Ejemplo Personaje"}
             crear_personaje_mongo(data)
             crear_personaje_postgres(data)
-            crear_personaje_neo4j(data)
             console.print("\n[bold blue][1] Personaje creado en las 3 bases de datos[/bold blue]")
         elif opcion == '2':
             data = {"nombre": "Ejemplo Hechizo"}
             crear_hechizo_mongo(data)
             crear_hechizo_postgres(data)
-            crear_hechizo_neo4j(data)
             console.print("\n[bold blue][2] Hechizo creado en las 3 bases de datos[/bold blue]")
         elif opcion == '3':
             data = {"nombre": "Ejemplo Objeto Mágico"}
             crear_objeto_magico_mongo(data)
             crear_objeto_magico_postgres(data)
-            crear_objeto_magico_neo4j(data)
             console.print("\n[bold blue][3] Objeto Mágico creado en las 3 bases de datos[/bold blue]")
         elif opcion == '4':
             data = {"nombre": "Ejemplo Publicación"}
             crear_publicacion_mongo(data)
             crear_publicacion_postgres(data)
-            crear_publicacion_neo4j(data)
             console.print("\n[bold blue][4] Publicación creada en las 3 bases de datos[/bold blue]")
         elif opcion == '5':
             data = {"nombre": "Ejemplo Criatura Mágica"}
             crear_criatura_magica_mongo(data)
             crear_criatura_magica_postgres(data)
-            crear_criatura_magica_neo4j(data)
             console.print("\n[bold blue][5] Criatura Mágica creada en las 3 bases de datos[/bold blue]")
         else:
             console.print("[bold red]❌ Opción inválida. Por favor, selecciona una opción válida.[/bold red]")
