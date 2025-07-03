@@ -41,10 +41,10 @@ def reiniciar_dbs():
         console.print("[bold green]PostgreSQL reiniciada correctamente.[/bold green]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar PostgreSQL: {e}[/bold red]")
-    # MongoDB (placeholder)
+    # MongoDB
     try:
-        # subprocess.run(["python", "mongo/reset.py"], check=True)
-        console.print("[bold yellow]Reset de MongoDB pendiente de implementar.[/bold yellow]")
+        subprocess.run(["python", "mongo/reset.py"], check=True)
+        console.print("[bold green]MongoDB reiniciada correctamente.[/bold green]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar MongoDB: {e}[/bold red]")
     # Neo4j (placeholder)
@@ -119,17 +119,35 @@ def opcion_casos_uso():
         if opcion == '0':
             break
         elif opcion == '1':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_1_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_1_mongo()
         elif opcion == '2':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_2_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_2_mongo()
         elif opcion == '3':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_3_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_3_mongo()
         elif opcion == '4':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_4_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_4_mongo()
         elif opcion == '5':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_5_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_5_mongo()
         elif opcion == '6':
+            console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_6_postgres()
+            console.rule("[bold green]MongoDB[/bold green]")
+            caso_6_mongo()
         else:
             console.print("[bold red]❌ Opción inválida. Por favor, selecciona una opción válida.[/bold red]")
             continue

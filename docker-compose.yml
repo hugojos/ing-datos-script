@@ -14,5 +14,17 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+  mongo:
+    image: mongo:7
+    container_name: mongo_hp
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: harry_potter
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
 volumes:
   pgdata:
+  mongodata:
