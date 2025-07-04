@@ -15,9 +15,14 @@ def caso_1():
     ORDER BY cantidad_personajes DESC
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Personajes por libro:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Personajes por libro (Neo4j)")
+    table.add_column("Libro", style="cyan")
+    table.add_column("Cantidad de personajes", style="magenta")
     for row in result:
-        print(row)
+        table.add_row(str(row.get('libro', '')), str(row.get('cantidad_personajes', '')))
+    Console().print(table)
     conn.close()
 
 def caso_2():
@@ -32,9 +37,14 @@ def caso_2():
     ORDER BY cantidad_libros DESC
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Objetos más relevantes:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Objetos más relevantes (Neo4j)")
+    table.add_column("Objeto", style="cyan")
+    table.add_column("Cantidad de libros", style="magenta")
     for row in result:
-        print(row)
+        table.add_row(str(row.get('objeto', '')), str(row.get('cantidad_libros', '')))
+    Console().print(table)
     conn.close()
 
 def caso_3():
@@ -44,14 +54,21 @@ def caso_3():
         print("No se pudo conectar a Neo4j")
         return
     query = '''
-    MATCH (c:Criatura)-[:APARECE_EN]->(l:Libro)
+    MATCH (l:Libro)
+    OPTIONAL MATCH (c:Criatura)-[:APARECE_EN]->(l)
     RETURN l.titulo AS libro, COLLECT(DISTINCT c.nombre) AS criaturas
     ORDER BY l.publicacion
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Criaturas por libro:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Criaturas por libro (Neo4j)")
+    table.add_column("Libro", style="cyan")
+    table.add_column("Criaturas", style="magenta")
     for row in result:
-        print(row)
+        criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
+        table.add_row(str(row.get('libro', '')), criaturas)
+    Console().print(table)
     conn.close()
 
 def caso_4():
@@ -68,9 +85,14 @@ def caso_4():
     RETURN p.nombre AS personaje, libros_aparece
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Profesores en más de 4 libros:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Profesores en más de 4 libros (Neo4j)")
+    table.add_column("Personaje", style="cyan")
+    table.add_column("Libros en los que aparece", style="magenta")
     for row in result:
-        print(row)
+        table.add_row(str(row.get('personaje', '')), str(row.get('libros_aparece', '')))
+    Console().print(table)
     conn.close()
 
 def caso_5():
@@ -88,9 +110,13 @@ def caso_5():
     RETURN COUNT(DISTINCT objeto) AS total_objetos
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Objetos mencionados o poseídos:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Objetos mencionados o poseídos (Neo4j)")
+    table.add_column("Total de objetos", style="magenta")
     for row in result:
-        print(row)
+        table.add_row(str(row.get('total_objetos', '')))
+    Console().print(table)
     conn.close()
 
 def caso_6():
@@ -113,7 +139,13 @@ def caso_6():
     RETURN varita_elegida.nombre AS varita, h.nombre AS hechizo, veces_usado
     '''
     result = conn.execute_query(query)
-    print("[Neo4j] Varita y hechizo más usado:")
+    from rich.table import Table
+    from rich.console import Console
+    table = Table(title="Varita y hechizo más usado (Neo4j)")
+    table.add_column("Varita", style="cyan")
+    table.add_column("Hechizo", style="magenta")
+    table.add_column("Veces usado", style="green")
     for row in result:
-        print(row)
+        table.add_row(str(row.get('varita', '')), str(row.get('hechizo', '')), str(row.get('veces_usado', '')))
+    Console().print(table)
     conn.close()

@@ -22,6 +22,19 @@ services:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
+  neo4j:
+    image: neo4j:5.15
+    container_name: neo4j_hp
+    environment:
+      NEO4J_AUTH: neo4j/neo4j123
+      NEO4J_dbms_default__database: harrypotter
+      NEO4J_dbms_databases_read__only: false
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    volumes:
+      - neo4jdata:/data
 volumes:
   pgdata:
   mongodata:
+  neo4jdata:

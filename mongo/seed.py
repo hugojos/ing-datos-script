@@ -2,9 +2,10 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from db_mongo import get_db
+from rich.console import Console
+from rich.panel import Panel
 
-
-
+console = Console()
 
 # Seed ajustado para reflejar exactamente las relaciones de las tablas Aparece, Posee y Mencion de PostgreSQL
 libros = [
@@ -145,7 +146,7 @@ def seed_libros():
     db = get_db()
     db.libros.delete_many({})
     db.libros.insert_many(libros)
-    print("Colección 'libros' poblada correctamente.")
+    console.print(Panel("[bold green]Colección 'libros' poblada correctamente.[/bold green]", title="MongoDB Seed"))
 
 if __name__ == "__main__":
     seed_libros()

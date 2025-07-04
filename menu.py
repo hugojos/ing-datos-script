@@ -10,6 +10,7 @@ from postgresql.crear import crear_personaje as crear_personaje_postgres, crear_
 # Importar funciones de casos de uso
 from mongo.caso_de_uso import caso_1 as caso_1_mongo, caso_2 as caso_2_mongo, caso_3 as caso_3_mongo, caso_4 as caso_4_mongo, caso_5 as caso_5_mongo, caso_6 as caso_6_mongo
 from postgresql.caso_de_uso import caso_1 as caso_1_postgres, caso_2 as caso_2_postgres, caso_3 as caso_3_postgres, caso_4 as caso_4_postgres, caso_5 as caso_5_postgres, caso_6 as caso_6_postgres
+from neo4j_app.caso_de_uso import caso_1 as caso_1_neo4j, caso_2 as caso_2_neo4j, caso_3 as caso_3_neo4j, caso_4 as caso_4_neo4j, caso_5 as caso_5_neo4j, caso_6 as caso_6_neo4j
 
 console = Console()
 
@@ -45,12 +46,14 @@ def reiniciar_dbs():
         console.print("[bold green]MongoDB reiniciada correctamente.[/bold green]")
     except Exception as e:
         console.print(f"[bold red]Error al reiniciar MongoDB: {e}[/bold red]")
-    # Neo4j (placeholder)
+    # Neo4j (reset y seed)
     try:
-        # subprocess.run(["py", "neo4j/reset.py"], check=True)
-        console.print("[bold yellow]Reset de Neo4j pendiente de implementar.[/bold yellow]")
+        subprocess.run(["py", "neo4j_app/crear.py"], check=True)
+        console.print("[bold green]Neo4j reiniciada correctamente.[/bold green]")
+        subprocess.run(["py", "neo4j_app/seed.py"], check=True)
+        console.print("[bold green]Neo4j poblada con datos de ejemplo.[/bold green]")
     except Exception as e:
-        console.print(f"[bold red]Error al reiniciar Neo4j: {e}[/bold red]")
+        console.print(f"[bold red]Error al reiniciar o poblar Neo4j: {e}[/bold red]")
     console.input("\n[bold green]Presiona Enter para continuar...[/bold green]")
 
 def opcion_crear():
@@ -116,31 +119,43 @@ def opcion_casos_uso():
             caso_1_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_1_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_1_neo4j()
         elif opcion == '2':
             console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_2_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_2_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_2_neo4j()
         elif opcion == '3':
             console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_3_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_3_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_3_neo4j()
         elif opcion == '4':
             console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_4_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_4_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_4_neo4j()
         elif opcion == '5':
             console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_5_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_5_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_5_neo4j()
         elif opcion == '6':
             console.rule("[bold blue]PostgreSQL[/bold blue]")
             caso_6_postgres()
             console.rule("[bold green]MongoDB[/bold green]")
             caso_6_mongo()
+            console.rule("[bold magenta]Neo4j[/bold magenta]")
+            caso_6_neo4j()
         else:
             console.print("[bold red]❌ Opción inválida. Por favor, selecciona una opción válida.[/bold red]")
             continue

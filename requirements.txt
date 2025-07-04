@@ -2,3 +2,4 @@ rich
 psycopg2-binary
 python-dotenv
 pymongo
+neo4j

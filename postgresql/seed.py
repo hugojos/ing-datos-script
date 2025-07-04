@@ -1,6 +1,11 @@
+
 import os
 import psycopg2
 from dotenv import load_dotenv
+from rich.console import Console
+from rich.panel import Panel
+
+console = Console()
 
 # Cargar variables de entorno
 load_dotenv()
@@ -144,7 +149,7 @@ def seed():
     conn.commit()
     cur.close()
     conn.close()
-    print('Seed ejecutado correctamente.')
+    console.print(Panel("[bold green]Seed ejecutado correctamente.[/bold green]", title="PostgreSQL Seed"))
 
 if __name__ == "__main__":
     seed()
