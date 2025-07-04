@@ -1,5 +1,19 @@
 def crear_personaje(data):
-    print('[MongoDB] Crear personaje:', data)
+    """Crea un personaje y lo asocia a un libro en MongoDB"""
+    from db_mongo import get_db
+    db = get_db()
+    libro = db.libros.find_one({"titulo": data["libro"]})
+    if not libro:
+        print(f"[MongoDB] Libro '{data['libro']}' no encontrado")
+        return
+    personaje = {
+        "nombre": data["nombre"],
+        "rol": data["rol"],
+        "casa": data["casa"],
+        "alineacion": data["alineacion"]
+    }
+    db.libros.update_one({"_id": libro["_id"]}, {"$push": {"personajes": personaje}})
+    print(f"[MongoDB] Personaje '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
 
 def crear_hechizo(data):
     print('[MongoDB] Crear hechizo:', data)

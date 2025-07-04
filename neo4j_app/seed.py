@@ -129,8 +129,13 @@ def seed():
 
 
     # Libros
-    crear_libro(conn, "La piedra filosofal", 1997, "Primer libro de la saga.")
-    crear_libro(conn, "La cámara secreta", 1998, "Segundo libro de la saga.")
+    crear_libro(conn, "LA PIEDRA FILOSOFAL", 1997, "Primer libro de la saga.")
+    crear_libro(conn, "LA CÁMARA SECRETA", 1998, "Segundo libro de la saga.")
+    crear_libro(conn, "EL PRISIONERO DE AZKABAN", 1999, "Tercer libro de la saga.")
+    crear_libro(conn, "EL CÁLIZ DE FUEGO", 2000, "Cuarto libro de la saga.")
+    crear_libro(conn, "LA ORDEN DEL FÉNIX", 2003, "Quinto libro de la saga.")
+    crear_libro(conn, "EL MISTERIO DEL PRÍNCIPE", 2005, "Sexto libro de la saga.")
+    crear_libro(conn, "LAS RELIQUIAS DE LA MUERTE", 2007, "Último libro de la saga.")
 
     # Personajes
     crear_personaje(conn, "Harry Potter", "Estudiante", "Gryffindor", "Bueno")
@@ -149,16 +154,17 @@ def seed():
     crear_hechizo(conn, "Expelliarmus", "1997-06-26", "Desarma al oponente")
     crear_hechizo(conn, "Avada Kedavra", "1998-07-02", "Maldición asesina")
 
+
     # Relaciones
-    personaje_aparece_en(conn, "Harry Potter", "La piedra filosofal")
-    personaje_aparece_en(conn, "Hermione Granger", "La piedra filosofal")
-    personaje_aparece_en(conn, "Lord Voldemort", "La cámara secreta")
+    personaje_aparece_en(conn, "Harry Potter", "LA PIEDRA FILOSOFAL")
+    personaje_aparece_en(conn, "Hermione Granger", "LA PIEDRA FILOSOFAL")
+    personaje_aparece_en(conn, "Lord Voldemort", "LA CÁMARA SECRETA")
 
-    objeto_aparece_en(conn, "Varita de Saúco", "La piedra filosofal")
-    objeto_aparece_en(conn, "Capa de Invisibilidad", "La cámara secreta")
+    objeto_aparece_en(conn, "Varita de Saúco", "LA PIEDRA FILOSOFAL")
+    objeto_aparece_en(conn, "Capa de Invisibilidad", "LA CÁMARA SECRETA")
 
-    criatura_aparece_en(conn, "Fénix", "La piedra filosofal")
-    criatura_aparece_en(conn, "Basilisco", "La cámara secreta")
+    criatura_aparece_en(conn, "Fénix", "LA PIEDRA FILOSOFAL")
+    criatura_aparece_en(conn, "Basilisco", "LA CÁMARA SECRETA")
 
     personaje_posee_objeto(conn, "Harry Potter", "Capa de Invisibilidad")
     personaje_posee_objeto(conn, "Lord Voldemort", "Varita de Saúco")

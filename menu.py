@@ -59,7 +59,7 @@ def opcion_crear():
     while True:
         console.print("\n[bold yellow]🔧 Has seleccionado: CREAR[/bold yellow]")
         crear_text = Text("\n¿Qué deseas crear?\n", style="bold yellow")
-        crear_text.append("1. Personaje\n", style="bold cyan")
+        crear_text.append("1. Crear nuevo personaje en libro\n", style="bold cyan")
         crear_text.append("2. Hechizo\n", style="bold cyan")
         crear_text.append("3. Objeto Mágico\n", style="bold cyan")
         crear_text.append("4. Publicación\n", style="bold cyan")
@@ -70,10 +70,33 @@ def opcion_crear():
         if opcion == '0':
             break
         elif opcion == '1':
-            data = {"nombre": "Ejemplo Personaje"}
+            # Mostrar títulos válidos antes de pedir el libro
+            titulos_libros = [
+                "LA PIEDRA FILOSOFAL",
+                "LA CÁMARA SECRETA",
+                "EL PRISIONERO DE AZKABAN",
+                "EL CÁLIZ DE FUEGO",
+                "LA ORDEN DEL FÉNIX",
+                "EL MISTERIO DEL PRÍNCIPE",
+                "LAS RELIQUIAS DE LA MUERTE"
+            ]
+            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
+            for t in titulos_libros:
+                console.print(f"- {t}")
+            nombre = console.input("[bold green]Nombre del personaje: [/bold green]").strip()
+            rol = console.input("[bold green]Rol: [/bold green]").strip()
+            casa = console.input("[bold green]Casa: [/bold green]").strip()
+            alineacion = console.input("[bold green]Alineación: [/bold green]").strip()
+            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            if libro not in titulos_libros:
+                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
+                continue
+            data = {"nombre": nombre, "rol": rol, "casa": casa, "alineacion": alineacion, "libro": libro}
             crear_personaje_mongo(data)
             crear_personaje_postgres(data)
-            console.print("\n[bold blue][1] Personaje creado en las 3 bases de datos[/bold blue]")
+            from neo4j_app.crear import crear_personaje_en_libro as crear_personaje_neo4j
+            crear_personaje_neo4j(data)
+            console.print("\n[bold blue][1] Personaje creado y asociado al libro en las 3 bases de datos[/bold blue]")
         elif opcion == '2':
             data = {"nombre": "Ejemplo Hechizo"}
             crear_hechizo_mongo(data)

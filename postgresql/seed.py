@@ -44,13 +44,13 @@ def seed():
     # Publicaciones (libros)
     cur.execute("""
         INSERT INTO Publicacion (id, titulo, descripcion, tipo, ano_lanzamiento) VALUES
-          (1, 'La Piedra Filosofal', 'Primer libro', 'libro', 1997),
-          (2, 'La Cámara Secreta', 'Segundo libro', 'libro', 1998),
-          (3, 'El Prisionero de Azkaban', 'Tercer libro', 'libro', 1999),
-          (4, 'El Cáliz de Fuego', 'Cuarto libro', 'libro', 2000),
-          (5, 'La Orden del Fénix', 'Quinto libro', 'libro', 2003),
-          (6, 'El Misterio del Príncipe', 'Sexto libro', 'libro', 2005),
-          (7, 'Las Reliquias de la Muerte', 'Último libro', 'libro', 2007);
+          (1, 'LA PIEDRA FILOSOFAL', 'Primer libro', 'libro', 1997),
+          (2, 'LA CÁMARA SECRETA', 'Segundo libro', 'libro', 1998),
+          (3, 'EL PRISIONERO DE AZKABAN', 'Tercer libro', 'libro', 1999),
+          (4, 'EL CÁLIZ DE FUEGO', 'Cuarto libro', 'libro', 2000),
+          (5, 'LA ORDEN DEL FÉNIX', 'Quinto libro', 'libro', 2003),
+          (6, 'EL MISTERIO DEL PRÍNCIPE', 'Sexto libro', 'libro', 2005),
+          (7, 'LAS RELIQUIAS DE LA MUERTE', 'Último libro', 'libro', 2007);
     """)
     # Personajes
     cur.execute("""

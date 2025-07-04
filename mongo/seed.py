@@ -10,7 +10,7 @@ console = Console()
 # Seed ajustado para reflejar exactamente las relaciones de las tablas Aparece, Posee y Mencion de PostgreSQL
 libros = [
     {
-        "titulo": "La Piedra Filosofal",
+        "titulo": "LA PIEDRA FILOSOFAL",
         "publicacion": 1997,
         "descripcion": "Primer libro",
         "personajes": [
@@ -28,7 +28,7 @@ libros = [
         ]
     },
     {
-        "titulo": "La Cámara Secreta",
+        "titulo": "LA CÁMARA SECRETA",
         "publicacion": 1998,
         "descripcion": "Segundo libro",
         "personajes": [
@@ -52,7 +52,7 @@ libros = [
         ]
     },
     {
-        "titulo": "El Prisionero de Azkaban",
+        "titulo": "EL PRISIONERO DE AZKABAN",
         "publicacion": 1999,
         "descripcion": "Tercer libro",
         "personajes": [
@@ -76,7 +76,7 @@ libros = [
         ]
     },
     {
-        "titulo": "El Cáliz de Fuego",
+        "titulo": "EL CÁLIZ DE FUEGO",
         "publicacion": 2000,
         "descripcion": "Cuarto libro",
         "personajes": [
@@ -101,7 +101,7 @@ libros = [
         ]
     },
     {
-        "titulo": "La Orden del Fénix",
+        "titulo": "LA ORDEN DEL FÉNIX",
         "publicacion": 2003,
         "descripcion": "Quinto libro",
         "personajes": [
@@ -126,7 +126,7 @@ libros = [
         ]
     },
     {
-        "titulo": "El Misterio del Príncipe",
+        "titulo": "EL MISTERIO DEL PRÍNCIPE",
         "publicacion": 2005,
         "descripcion": "Sexto libro",
         "personajes": [
@@ -140,7 +140,7 @@ libros = [
         ]
     },
     {
-        "titulo": "Las Reliquias de la Muerte",
+        "titulo": "LAS RELIQUIAS DE LA MUERTE",
         "publicacion": 2007,
         "descripcion": "Último libro",
         "personajes": [
