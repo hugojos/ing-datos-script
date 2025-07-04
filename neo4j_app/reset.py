@@ -12,26 +12,16 @@ console = Console()
 
 def reset_neo4j():
     """Resetea completamente la base de datos Neo4j"""
-    print("------- Neo4j reset -------")
-    
     try:
-        neo4j_conn = get_neo4j_connection()
-        if not neo4j_conn.connect():
-            print("No se pudo conectar a Neo4j")
-            print("Asegúrate de que el contenedor de Neo4j esté ejecutándose:")
-            print("docker-compose up -d neo4j")
-            return False
-        neo4j_conn.close()
+        limpiar_base_datos()
+        crear_indices()
+        print("------- Neo4j Reset -------")
+        print("Base de datos Neo4j limpiada exitosamente")
+        return True
     except Exception as e:
-        print(f"Error al conectar: {e}")
+        print("------- Error -------")
+        print(f"Error al resetear la base de datos Neo4j: {e}")
         return False
-    limpiar_base_datos()
-    crear_indices()
-    print("base de datos neo4j reseteada")
-    print("nodos y relaciones eliminados")
-    print("índices recreados")
-    print("Neo4j reiniciada correctamente.")
-    return True
 
 def crear_estructura_base():
     """Crea la estructura básica de la base de datos con algunos datos de ejemplo"""
@@ -76,20 +66,7 @@ def crear_estructura_base():
 
 def main():
     """Función principal que ejecuta el reset completo"""
-    print("Iniciando proceso de reset de Neo4j...")
-    
-    # Resetear la base de datos
-    if reset_neo4j():
-        # Preguntar si crear estructura básica
-        print("\n¿Deseas crear una estructura básica con datos de ejemplo? (y/n):", end=" ")
-        respuesta = input().strip().lower()
-        if respuesta in ['y', 'yes', 'sí', 's']:
-            crear_estructura_base()
-            print("\nEstado final:")
-            obtener_estadisticas()
-    else:
-        print("El proceso de reset falló")
-        sys.exit(1)
+    reset_neo4j()
 
 if __name__ == "__main__":
     main()

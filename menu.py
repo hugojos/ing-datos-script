@@ -49,9 +49,8 @@ def reiniciar_dbs():
         print(f"Error al reiniciar o poblar MongoDB: {e}")
     # Neo4j (reset y seed)
     try:
-        subprocess.run(["py", "neo4j_app/crear.py"], check=True)
+        subprocess.run(["py", "neo4j_app/reset.py"], check=True)
         subprocess.run(["py", "neo4j_app/seed.py"], check=True)
-        # print("Neo4j reiniciada y poblada correctamente.")  # Eliminado según requerimiento
     except Exception as e:
         print(f"Error al reiniciar o poblar Neo4j: {e}")
     input("\nPresiona Enter para continuar...")
