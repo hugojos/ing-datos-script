@@ -56,20 +56,27 @@ def caso_3():
     query = '''
     MATCH (l:Libro)
     OPTIONAL MATCH (c:Criatura)-[:APARECE_EN]->(l)
-    RETURN l.titulo AS libro, COLLECT(DISTINCT c.nombre) AS criaturas
+    RETURN l.titulo AS libro, l.publicacion AS publicacion, COLLECT(DISTINCT c.nombre) AS criaturas
     ORDER BY l.publicacion
     '''
-    result = conn.execute_query(query)
-    from rich.table import Table
-    from rich.console import Console
-    table = Table(title="Criaturas por libro (Neo4j)")
-    table.add_column("Libro", style="cyan")
-    table.add_column("Criaturas", style="magenta")
-    for row in result:
-        criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
-        table.add_row(str(row.get('libro', '')), criaturas)
-    Console().print(table)
-    conn.close()
+    try:
+        result = conn.execute_query(query)
+        from rich.table import Table
+        from rich.console import Console
+        table = Table(title="Criaturas por libro (Neo4j)")
+        table.add_column("Libro", style="cyan")
+        table.add_column("Año", style="yellow")
+        table.add_column("Criaturas", style="magenta")
+        for row in result:
+            criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
+            table.add_row(str(row.get('libro', '')), str(row.get('publicacion', '')), criaturas)
+        Console().print(table)
+    except Exception as e:
+        from rich.console import Console
+        from rich.panel import Panel
+        Console().print(Panel(f"[bold red]Error al ejecutar consulta en Neo4j: {e}[/bold red]", title="Error"))
+    finally:
+        conn.close()
 
 def caso_4():
     """Profesores que aparecen en más de 4 libros"""
@@ -105,19 +112,26 @@ def caso_5():
     MATCH (o1:CosaMagica)-[:APARECE_EN]->(:Libro {titulo: "Las Reliquias de la Muerte"})
     WITH COLLECT(DISTINCT o1) AS objetos_del_ultimo
     MATCH (p:Personaje {alineacion: "bueno"})-[:POSEE]->(o2:CosaMagica)
-    WITH objetos_del_ultimo + COLLECT(DISTINCT o2) AS todos_los_objetos
+    WITH objetos_del_ultimo, COLLECT(DISTINCT o2) AS objetos_poseidos
+    WITH objetos_del_ultimo + objetos_poseidos AS todos_los_objetos
     UNWIND todos_los_objetos AS objeto
     RETURN COUNT(DISTINCT objeto) AS total_objetos
     '''
-    result = conn.execute_query(query)
-    from rich.table import Table
-    from rich.console import Console
-    table = Table(title="Objetos mencionados o poseídos (Neo4j)")
-    table.add_column("Total de objetos", style="magenta")
-    for row in result:
-        table.add_row(str(row.get('total_objetos', '')))
-    Console().print(table)
-    conn.close()
+    try:
+        result = conn.execute_query(query)
+        from rich.table import Table
+        from rich.console import Console
+        table = Table(title="Objetos mencionados o poseídos (Neo4j)")
+        table.add_column("Total de objetos", style="magenta")
+        for row in result:
+            table.add_row(str(row.get('total_objetos', '')))
+        Console().print(table)
+    except Exception as e:
+        from rich.console import Console
+        from rich.panel import Panel
+        Console().print(Panel(f"[bold red]Error al ejecutar consulta en Neo4j: {e}[/bold red]", title="Error"))
+    finally:
+        conn.close()
 
 def caso_6():
     """Varita y hechizo más usado"""
