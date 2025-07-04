@@ -73,9 +73,7 @@ def opcion_crear():
             casa = console.input("[bold green]Casa: [/bold green]").strip()
             alineacion = console.input("[bold green]Alineación: [/bold green]").strip()
             libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
-            if libro not in titulos_libros:
-                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
-                continue
+        
             data = {"nombre": nombre, "rol": rol, "casa": casa, "alineacion": alineacion, "libro": libro}
             crear_personaje_mongo(data)
             crear_personaje_postgres(data)
@@ -85,9 +83,6 @@ def opcion_crear():
         elif opcion == '2':
             nombre = console.input("[bold green]Nombre del monstruo: [/bold green]").strip()
             libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
-            if libro not in titulos_libros:
-                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
-                continue
             # Limitar a 10 monstruos por libro (consultando en MongoDB)
             from db_mongo import get_db
             db = get_db()
@@ -115,9 +110,6 @@ def opcion_crear():
             descripcion = console.input("[bold green]Descripción (opcional): [/bold green]").strip()
             tipo = console.input("[bold green]Tipo (opcional, por defecto 'general'): [/bold green]").strip() or 'general'
             libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
-            if libro not in titulos_libros:
-                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
-                return
             data = {"nombre": nombre, "descripcion": descripcion, "tipo": tipo, "libro": libro}
             from mongo.crear import asociar_objeto_magico_a_libro as asociar_objeto_mongo
             from postgresql.crear import asociar_objeto_magico_a_libro as asociar_objeto_postgres

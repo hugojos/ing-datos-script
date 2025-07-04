@@ -68,11 +68,8 @@ def crear_personaje(data):
         conn = psycopg2.connect(
             dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT
         )
-        print(f"[DEBUG] client_encoding: {conn.encoding}")
         cur = conn.cursor()
         # Buscar casa_id a partir del nombre de la casa (en mayúsculas)
-        print(f"[DEBUG] Buscando casa: {data['casa']}")
-        print(f"[DEBUG] Tipo de data['casa']: {type(data['casa'])}, valor: {data['casa']}")
         cur.execute("SELECT id FROM casa WHERE LOWER(nombre) = LOWER(%s)", (data["casa"],))
         casa_row = cur.fetchone()
         if not casa_row:
@@ -82,9 +79,7 @@ def crear_personaje(data):
             conn.close()
             return
         casa_id = casa_row[0]
-        print(f"[DEBUG] casa_id encontrado: {casa_id}")
         # Verificar si el personaje ya existe
-        print(f"[DEBUG] Tipo de data['nombre']: {type(data['nombre'])}, valor: {data['nombre']}")
         cur.execute("SELECT id FROM personaje WHERE nombre = %s", (data["nombre"],))
         if cur.fetchone():
             print(f"[PostgreSQL] Personaje '{data['nombre']}' ya existe, no se inserta de nuevo.")
@@ -101,17 +96,11 @@ def crear_personaje(data):
                     data["rol"],
                     casa_id
                 )
-                print(f"[DEBUG] SQL: {sql.strip()}")
-                print(f"[DEBUG] Valores: {valores}")
-                for i, v in enumerate(valores):
-                    print(f"[DEBUG] Valor {i}: tipo={type(v)}, valor={v}")
                 cur.execute(sql, valores)
-                print(f"[DEBUG] Personaje '{data['nombre']}' insertado")
                 conn.commit()
             except Exception as insert_exc:
                 print(f"[PostgreSQL] Error al insertar personaje: {insert_exc}")
         # Relacionar con libro
-        print(f"[DEBUG] Tipo de data['libro']: {type(data['libro'])}, valor: {data['libro']}")
         cur.execute("SELECT id FROM publicacion WHERE titulo = %s", (data["libro"],))
         libro_row = cur.fetchone()
         if not libro_row:
