@@ -1,3 +1,14 @@
+def asociar_objeto_magico_a_libro(data):
+    """Agrega un objeto mágico al array objetoMagico del libro en MongoDB."""
+    from db_mongo import get_db
+    db = get_db()
+    libro = db.libros.find_one({"titulo": data["libro"]})
+    if not libro:
+        print(f"[MongoDB] Libro '{data['libro']}' no encontrado")
+        return
+    objeto = {"nombre": data["nombre"], "descripcion": data.get("descripcion", ""), "tipo": data.get("tipo", "general")}
+    db.libros.update_one({"_id": libro["_id"]}, {"$push": {"objetoMagico": objeto}})
+    print(f"[MongoDB] Objeto mágico '{data['nombre']}' agregado a libro '{data['libro']}' (array 'objetoMagico')")
 def crear_personaje(data):
     """Crea un personaje y lo asocia a un libro en MongoDB"""
     from db_mongo import get_db

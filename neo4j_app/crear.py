@@ -1,3 +1,23 @@
+def asociar_objeto_magico_a_libro(data):
+    """Crea un objeto mágico (CosaMagica) y lo asocia a un libro en Neo4j."""
+    from db_neo4j import get_neo4j_connection
+    conn = get_neo4j_connection()
+    if not conn.connect():
+        print("[Neo4j] No se pudo conectar a Neo4j")
+        return
+    # Crear objeto mágico (si no existe)
+    query_objeto = '''
+    MERGE (o:CosaMagica {nombre: $nombre, descripcion: $descripcion, tipo: $tipo})
+    '''
+    conn.execute_query(query_objeto, {'nombre': data['nombre'], 'descripcion': data.get('descripcion', ''), 'tipo': data.get('tipo', 'general')})
+    # Crear relación con libro
+    query_rel = '''
+    MATCH (o:CosaMagica {nombre: $nombre}), (l:Libro {titulo: $libro})
+    MERGE (o)-[:APARECE_EN]->(l)
+    '''
+    conn.execute_query(query_rel, {'nombre': data['nombre'], 'libro': data['libro']})
+    print(f"[Neo4j] Objeto mágico '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+    conn.close()
 def crear_criatura_en_libro(data):
     """Crea una criatura mágica y la asocia a un libro en Neo4j"""
     from db_neo4j import get_neo4j_connection

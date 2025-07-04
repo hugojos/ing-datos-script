@@ -61,9 +61,10 @@ def opcion_crear():
         crear_text = Text("\n¿Qué deseas crear?\n", style="bold yellow")
         crear_text.append("1. Crear nuevo personaje en libro\n", style="bold cyan")
         crear_text.append("2. Agregar monstruo a un libro\n", style="bold cyan")
+        crear_text.append("3. Agregar objeto mágico a un libro\n", style="bold cyan")
         crear_text.append("0. Volver al menú principal\n", style="bold red")
         console.print(Panel(crear_text, title="[bold yellow]Crear[/bold yellow]", border_style="bright_blue", expand=False))
-        opcion = console.input("[bold green]\nSelecciona una opción (1, 2, 0 para volver): [/bold green]").strip()
+        opcion = console.input("[bold green]\nSelecciona una opción (1, 2, 3, 0 para volver): [/bold green]").strip()
         if opcion == '0':
             break
         elif opcion == '1':
@@ -134,6 +135,34 @@ def opcion_crear():
             from neo4j_app.crear import crear_criatura_en_libro as crear_criatura_neo4j
             crear_criatura_neo4j(data)
             console.print("\n[bold blue][2] Monstruo creado y asociado al libro en las 3 bases de datos[/bold blue]")
+        elif opcion == '3':
+            titulos_libros = [
+                "LA PIEDRA FILOSOFAL",
+                "LA CÁMARA SECRETA",
+                "EL PRISIONERO DE AZKABAN",
+                "EL CÁLIZ DE FUEGO",
+                "LA ORDEN DEL FÉNIX",
+                "EL MISTERIO DEL PRÍNCIPE",
+                "LAS RELIQUIAS DE LA MUERTE"
+            ]
+            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
+            for t in titulos_libros:
+                console.print(f"- {t}")
+            nombre = console.input("[bold green]Nombre del objeto mágico: [/bold green]").strip()
+            descripcion = console.input("[bold green]Descripción (opcional): [/bold green]").strip()
+            tipo = console.input("[bold green]Tipo (opcional, por defecto 'general'): [/bold green]").strip() or 'general'
+            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            if libro not in titulos_libros:
+                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
+                return
+            data = {"nombre": nombre, "descripcion": descripcion, "tipo": tipo, "libro": libro}
+            from mongo.crear import asociar_objeto_magico_a_libro as asociar_objeto_mongo
+            from postgresql.crear import asociar_objeto_magico_a_libro as asociar_objeto_postgres
+            from neo4j_app.crear import asociar_objeto_magico_a_libro as asociar_objeto_neo4j
+            asociar_objeto_mongo(data)
+            asociar_objeto_postgres(data)
+            asociar_objeto_neo4j(data)
+            console.print("\n[bold blue][3] Objeto mágico creado y asociado al libro en las 3 bases de datos[/bold blue]")
         else:
             console.print("[bold red]❌ Opción inválida. Por favor, selecciona una opción válida.[/bold red]")
         console.input("\n[bold green]Presiona Enter para continuar...[/bold green]")

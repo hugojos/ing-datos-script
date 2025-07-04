@@ -1,3 +1,57 @@
+def asociar_objeto_magico_a_libro(data):
+    """Crea un objeto mágico (si no existe) y lo asocia a un libro en PostgreSQL, usando un personaje genérico si es necesario."""
+    import os
+    from dotenv import load_dotenv
+    import psycopg2
+    load_dotenv()
+    DB_NAME = os.getenv('POSTGRES_DB', 'harry_potter')
+    DB_USER = os.getenv('POSTGRES_USER', 'postgres')
+    DB_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'postgres')
+    DB_HOST = os.getenv('POSTGRES_HOST', 'localhost')
+    DB_PORT = os.getenv('POSTGRES_PORT', 5433)
+    try:
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
+        cur = conn.cursor()
+        # Crear objeto mágico si no existe (no insertar id manualmente)
+        cur.execute("SELECT id FROM objetomagico WHERE nombre = %s", (data["nombre"],))
+        row = cur.fetchone()
+        if row:
+            objeto_id = row[0]
+        else:
+            cur.execute("INSERT INTO objetomagico (nombre, descripcion, tipo) VALUES (%s, %s, %s) RETURNING id", (data["nombre"], data.get("descripcion", ""), data.get("tipo", "general")))
+            objeto_id = cur.fetchone()[0]
+        # Crear personaje genérico si no existe
+        cur.execute("SELECT id FROM personaje WHERE nombre = %s", ("GENÉRICO",))
+        row = cur.fetchone()
+        if row:
+            personaje_id = row[0]
+        else:
+            # Buscar una casa válida para el personaje genérico
+            cur.execute("SELECT id FROM casa LIMIT 1")
+            casa_row = cur.fetchone()
+            casa_id = casa_row[0] if casa_row else None
+            cur.execute("INSERT INTO personaje (nombre, fecha_nacimiento, alineacion, rol, casa_id) VALUES (%s, %s, %s, %s, %s) RETURNING id", ("GENÉRICO", "1900-01-01", "neutro", "genérico", casa_id))
+            personaje_id = cur.fetchone()[0]
+        # Relacionar objeto con personaje
+        cur.execute("INSERT INTO posee (personaje_id, objeto_id) VALUES (%s, %s) ON CONFLICT DO NOTHING", (personaje_id, objeto_id))
+        # Buscar libro
+        cur.execute("SELECT id FROM publicacion WHERE titulo = %s", (data["libro"],))
+        libro_row = cur.fetchone()
+        if not libro_row:
+            print(f"[PostgreSQL] Libro '{data['libro']}' no encontrado")
+            conn.rollback()
+            cur.close()
+            conn.close()
+            return
+        libro_id = libro_row[0]
+        # Relacionar personaje con libro
+        cur.execute("INSERT INTO aparece (personaje_id, publicacion_id) VALUES (%s, %s) ON CONFLICT DO NOTHING", (personaje_id, libro_id))
+        conn.commit()
+        print(f"[PostgreSQL] Objeto mágico '{data['nombre']}' asociado a libro '{data['libro']}' (vía personaje genérico)")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"[PostgreSQL] Error al asociar objeto mágico: {e}")
 def crear_personaje(data):
     """Crea un personaje y lo asocia a un libro en PostgreSQL"""
     import os
