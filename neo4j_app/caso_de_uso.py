@@ -2,6 +2,10 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from db_neo4j import get_neo4j_connection
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from db_neo4j import get_neo4j_connection
 
 def caso_1():
     """Personajes por libro"""
@@ -71,8 +75,8 @@ def caso_3():
     query = '''
     MATCH (l:Libro)
     OPTIONAL MATCH (c:Criatura)-[:APARECE_EN]->(l)
-    RETURN l.titulo AS libro, l.publicacion AS publicacion, COLLECT(DISTINCT c.nombre) AS criaturas
-    ORDER BY l.publicacion
+    RETURN l.titulo AS libro, COLLECT(DISTINCT c.nombre) AS criaturas
+    ORDER BY l.titulo
     '''
     try:
         result = conn.execute_query(query)
@@ -87,13 +91,12 @@ def caso_3():
     from rich.panel import Panel
     table = Table(title="Criaturas por libro")
     table.add_column("Libro", style="cyan")
-    table.add_column("Año", style="yellow")
     table.add_column("Criaturas", style="magenta")
     vacio = True
     for row in result:
         vacio = False
         criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
-        table.add_row(str(row.get('libro', '')), str(row.get('publicacion', '')), criaturas)
+        table.add_row(str(row.get('libro', '')), criaturas)
     if vacio:
         Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
     else:

@@ -126,6 +126,8 @@ def seed():
         print("No se pudo conectar a Neo4j")
         return
 
+
+
     # Libros
     crear_libro(conn, "La piedra filosofal", 1997, "Primer libro de la saga.")
     crear_libro(conn, "La cámara secreta", 1998, "Segundo libro de la saga.")

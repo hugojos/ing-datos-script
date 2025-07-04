@@ -23,47 +23,6 @@ def reset_neo4j():
         print(f"Error al resetear la base de datos Neo4j: {e}")
         return False
 
-def crear_estructura_base():
-    """Crea la estructura básica de la base de datos con algunos datos de ejemplo"""
-    print("creando estructura básica")
-    
-    try:
-        neo4j_conn = get_neo4j_connection()
-        if neo4j_conn.connect():
-            consultas_ejemplo = [
-                """
-                CREATE (h:Hechizo {
-                    nombre: 'Expelliarmus',
-                    descripcion: 'Desarmador',
-                    dificultad: 'Intermedio',
-                    tipo: 'Defensivo'
-                })
-                """,
-                """
-                CREATE (p:Personaje {
-                    nombre: 'Harry Potter',
-                    casa: 'Gryffindor',
-                    sangre: 'Mestiza',
-                    ocupacion: 'Estudiante'
-                })
-                """,
-                """
-                CREATE (o:ObjetoMagico {
-                    nombre: 'Varita de Saúco',
-                    descripcion: 'La varita más poderosa que existe',
-                    rareza: 'Única',
-                    origen: 'Desconocido'
-                })
-                """
-            ]
-            for consulta in consultas_ejemplo:
-                neo4j_conn.execute_query(consulta)
-            print("estructura básica creada con datos de ejemplo")
-        neo4j_conn.close()
-        print("Neo4j poblada con datos de ejemplo.")
-    except Exception as e:
-        print(f"Error al crear estructura base: {e}")
-
 def main():
     """Función principal que ejecuta el reset completo"""
     reset_neo4j()

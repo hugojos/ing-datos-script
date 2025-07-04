@@ -22,8 +22,9 @@ libros = [
         ],
         "criaturas": [],
         "objetoMagico": [
-            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": "Harry Potter"},
-            {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"}
+            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": ["Harry Potter", "Albus Dumbledore"]},
+            {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Ron Weasley"}
         ]
     },
     {
@@ -39,13 +40,14 @@ libros = [
             {"nombre": "Severus Snape", "rol": "profesor", "casa": "Slytherin", "alineacion": "neutral"},
             {"nombre": "Draco Malfoy", "rol": "estudiante", "casa": "Slytherin", "alineacion": "neutral"}
         ],
-        "criaturas": [ {"nombre": "Fawkes"} ],
+        "criaturas": [
+            {"nombre": "Fawkes"}
+        ],
         "objetoMagico": [
-            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Harry Potter"},
-            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "1": "Draco Malfoy"},
-            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": "Harry Potter"},
-            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": "Severus Snape"},
+            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": ["Harry Potter", "Albus Dumbledore"]},
             {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Ron Weasley"},
+            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": ["Severus Snape", "Draco Malfoy"]},
             {"nombre": "Giratiempos", "tipo": "objeto", "descripcion": "Permite viajar en el tiempo", "duenio": "Hermione Granger"}
         ]
     },
@@ -62,13 +64,14 @@ libros = [
             {"nombre": "Severus Snape", "rol": "profesor", "casa": "Slytherin", "alineacion": "neutral"},
             {"nombre": "Draco Malfoy", "rol": "estudiante", "casa": "Slytherin", "alineacion": "neutral"}
         ],
-        "criaturas": [ {"nombre": "Buckbeak"} ],
+        "criaturas": [
+            {"nombre": "Buckbeak"}
+        ],
         "objetoMagico": [
-            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Harry Potter"},
-            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": "Draco Malfoy"},
-            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": "Harry Potter"},
-            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": "Severus Snape"},
+            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": ["Harry Potter", "Albus Dumbledore"]},
             {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Ron Weasley"},
+            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": ["Severus Snape", "Draco Malfoy"]},
             {"nombre": "Giratiempos", "tipo": "objeto", "descripcion": "Permite viajar en el tiempo", "duenio": "Hermione Granger"}
         ]
     },
@@ -86,10 +89,15 @@ libros = [
             {"nombre": "Draco Malfoy", "rol": "estudiante", "casa": "Slytherin", "alineacion": "neutral"},
             {"nombre": "Voldemort", "rol": "villano", "casa": "Slytherin", "alineacion": "malo"}
         ],
-        "criaturas": [ {"nombre": "Buckbeak"} ],
+        "criaturas": [
+            {"nombre": "Buckbeak"}
+        ],
         "objetoMagico": [
-            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": "Harry Potter"},
-            {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"}
+            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": ["Harry Potter", "Albus Dumbledore"]},
+            {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Ron Weasley"},
+            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": ["Severus Snape", "Draco Malfoy"]},
+            {"nombre": "Giratiempos", "tipo": "objeto", "descripcion": "Permite viajar en el tiempo", "duenio": "Hermione Granger"}
         ]
     },
     {
@@ -106,10 +114,14 @@ libros = [
             {"nombre": "Draco Malfoy", "rol": "estudiante", "casa": "Slytherin", "alineacion": "neutral"},
             {"nombre": "Voldemort", "rol": "villano", "casa": "Slytherin", "alineacion": "malo"}
         ],
-        "criaturas": [ {"nombre": "Fawkes"} ],
+        "criaturas": [
+            {"nombre": "Fawkes"}
+        ],
         "objetoMagico": [
-            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Saúco", "tipo": "varita", "descripcion": "La varita más poderosa", "duenio": ["Harry Potter", "Albus Dumbledore"]},
             {"nombre": "Capa de Invisibilidad", "tipo": "capa", "descripcion": "Vuelve invisible", "duenio": "Harry Potter"},
+            {"nombre": "Varita de Harry", "tipo": "varita", "descripcion": "Varita de acebo", "duenio": "Ron Weasley"},
+            {"nombre": "Varita de Draco", "tipo": "varita", "descripcion": "Varita de espino", "duenio": ["Severus Snape", "Draco Malfoy"]},
             {"nombre": "Giratiempos", "tipo": "objeto", "descripcion": "Permite viajar en el tiempo", "duenio": "Hermione Granger"}
         ]
     },
@@ -135,7 +147,9 @@ libros = [
             {"nombre": "Harry Potter", "rol": "estudiante", "casa": "Gryffindor", "alineacion": "bueno"},
             {"nombre": "Voldemort", "rol": "villano", "casa": "Slytherin", "alineacion": "malo"}
         ],
-        "criaturas": [ {"nombre": "Nagini"} ],
+        "criaturas": [
+            {"nombre": "Nagini"}
+        ],
         "objetoMagico": [
             {"nombre": "Horcrux", "tipo": "objeto", "descripcion": "Fragmento de alma", "duenio": "Voldemort"}
         ]
