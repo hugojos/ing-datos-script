@@ -1,179 +1,92 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from db_neo4j import get_neo4j_connection
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from neo4j_app.crear import crear_personaje_en_libro, crear_criatura_en_libro, asociar_objeto_magico_a_libro
 
-def crear_personaje(conn, nombre, rol, casa, alineacion):
-    query = """
-    CREATE (:Personaje {
-        nombre: $nombre,
-        rol: $rol,
-        casa: $casa,
-        alineacion: $alineacion
-    })
-    """
-    conn.execute_query(query, {
-        'nombre': nombre,
-        'rol': rol,
-        'casa': casa,
-        'alineacion': alineacion
-    })
-
-def crear_libro(conn, titulo, publicacion, descripcion):
-    query = """
-    CREATE (:Libro {
-        titulo: $titulo,
-        publicacion: $publicacion,
-        descripcion: $descripcion
-    })
-    """
-    conn.execute_query(query, {
-        'titulo': titulo,
-        'publicacion': publicacion,
-        'descripcion': descripcion
-    })
-
-def crear_objeto(conn, nombre, tipo, descripcion):
-    query = """
-    CREATE (:CosaMagica {
-        nombre: $nombre,
-        tipo: $tipo,
-        descripcion: $descripcion
-    })
-    """
-    conn.execute_query(query, {
-        'nombre': nombre,
-        'tipo': tipo,
-        'descripcion': descripcion
-    })
-
-def crear_criatura(conn, nombre):
-    query = """
-    CREATE (:Criatura {
-        nombre: $nombre
-    })
-    """
-    conn.execute_query(query, {'nombre': nombre})
-
-def crear_hechizo(conn, nombre, fecha, evento):
-    query = """
-    CREATE (:Hechizo {
-        nombre: $nombre,
-        fecha: $fecha,
-        evento: $evento
-    })
-    """
-    conn.execute_query(query, {
-        'nombre': nombre,
-        'fecha': fecha,
-        'evento': evento
-    })
-
-def personaje_aparece_en(conn, nombre_personaje, titulo_libro):
-    query = """
-    MATCH (p:Personaje {nombre: $nombre}), (l:Libro {titulo: $titulo})
-    MERGE (p)-[:APARECE_EN]->(l)
-    """
-    conn.execute_query(query, {
-        'nombre': nombre_personaje,
-        'titulo': titulo_libro
-    })
-
-def objeto_aparece_en(conn, nombre_objeto, titulo_libro):
-    query = """
-    MATCH (o:CosaMagica {nombre: $nombre}), (l:Libro {titulo: $titulo})
-    MERGE (o)-[:APARECE_EN]->(l)
-    """
-    conn.execute_query(query, {
-        'nombre': nombre_objeto,
-        'titulo': titulo_libro
-    })
-
-def criatura_aparece_en(conn, nombre_criatura, titulo_libro):
-    query = """
-    MATCH (c:Criatura {nombre: $nombre}), (l:Libro {titulo: $titulo})
-    MERGE (c)-[:APARECE_EN]->(l)
-    """
-    conn.execute_query(query, {
-        'nombre': nombre_criatura,
-        'titulo': titulo_libro
-    })
-
-def personaje_posee_objeto(conn, nombre_personaje, nombre_objeto):
-    query = """
-    MATCH (p:Personaje {nombre: $nombre}), (o:CosaMagica {nombre: $objeto})
-    MERGE (p)-[:POSEE]->(o)
-    """
-    conn.execute_query(query, {
-        'nombre': nombre_personaje,
-        'objeto': nombre_objeto
-    })
-
-def hechizo_lanzado_con(conn, nombre_hechizo, nombre_objeto):
-    query = """
-    MATCH (h:Hechizo {nombre: $hechizo}), (o:CosaMagica {nombre: $objeto})
-    MERGE (h)-[:LANZADO_CON]->(o)
-    """
-    conn.execute_query(query, {
-        'hechizo': nombre_hechizo,
-        'objeto': nombre_objeto
-    })
-
-# Seed de ejemplo (ajusta los datos según tu seed de PostgreSQL)
 def seed():
+    # Libros
+    libros = [
+        "LA PIEDRA FILOSOFAL",
+        "LA CÁMARA SECRETA",
+        "EL PRISIONERO DE AZKABAN",
+        "EL CÁLIZ DE FUEGO",
+        "LA ORDEN DEL FÉNIX",
+        "EL MISTERIO DEL PRÍNCIPE",
+        "LAS RELIQUIAS DE LA MUERTE"
+    ]
+    # Crear nodos de libros explícitamente
+    from db_neo4j import get_neo4j_connection
     conn = get_neo4j_connection()
     if not conn.connect():
-        print("No se pudo conectar a Neo4j")
+        print("No se pudo conectar a Neo4j para crear libros")
         return
-
-
-
-    # Libros
-    crear_libro(conn, "LA PIEDRA FILOSOFAL", 1997, "Primer libro de la saga.")
-    crear_libro(conn, "LA CÁMARA SECRETA", 1998, "Segundo libro de la saga.")
-    crear_libro(conn, "EL PRISIONERO DE AZKABAN", 1999, "Tercer libro de la saga.")
-    crear_libro(conn, "EL CÁLIZ DE FUEGO", 2000, "Cuarto libro de la saga.")
-    crear_libro(conn, "LA ORDEN DEL FÉNIX", 2003, "Quinto libro de la saga.")
-    crear_libro(conn, "EL MISTERIO DEL PRÍNCIPE", 2005, "Sexto libro de la saga.")
-    crear_libro(conn, "LAS RELIQUIAS DE LA MUERTE", 2007, "Último libro de la saga.")
-
-    # Personajes
-    crear_personaje(conn, "Harry Potter", "Estudiante", "Gryffindor", "Bueno")
-    crear_personaje(conn, "Hermione Granger", "Estudiante", "Gryffindor", "Bueno")
-    crear_personaje(conn, "Lord Voldemort", "Mago Oscuro", "Slytherin", "Malo")
-
-    # Objetos mágicos
-    crear_objeto(conn, "Varita de Saúco", "Varita", "Una de las Reliquias de la Muerte.")
-    crear_objeto(conn, "Capa de Invisibilidad", "Capa", "Hace invisible al portador.")
-
-    # Criaturas
-    crear_criatura(conn, "Fénix")
-    crear_criatura(conn, "Basilisco")
-
-    # Hechizos
-    crear_hechizo(conn, "Expelliarmus", "1997-06-26", "Desarma al oponente")
-    crear_hechizo(conn, "Avada Kedavra", "1998-07-02", "Maldición asesina")
-
-
-    # Relaciones
-    personaje_aparece_en(conn, "Harry Potter", "LA PIEDRA FILOSOFAL")
-    personaje_aparece_en(conn, "Hermione Granger", "LA PIEDRA FILOSOFAL")
-    personaje_aparece_en(conn, "Lord Voldemort", "LA CÁMARA SECRETA")
-
-    objeto_aparece_en(conn, "Varita de Saúco", "LA PIEDRA FILOSOFAL")
-    objeto_aparece_en(conn, "Capa de Invisibilidad", "LA CÁMARA SECRETA")
-
-    criatura_aparece_en(conn, "Fénix", "LA PIEDRA FILOSOFAL")
-    criatura_aparece_en(conn, "Basilisco", "LA CÁMARA SECRETA")
-
-    personaje_posee_objeto(conn, "Harry Potter", "Capa de Invisibilidad")
-    personaje_posee_objeto(conn, "Lord Voldemort", "Varita de Saúco")
-
-    hechizo_lanzado_con(conn, "Expelliarmus", "Varita de Saúco")
-    hechizo_lanzado_con(conn, "Avada Kedavra", "Varita de Saúco")
-
+    for idx, libro in enumerate(libros):
+        query = """
+        MERGE (l:Libro {titulo: $titulo, publicacion: $publicacion, descripcion: $descripcion})
+        """
+        conn.execute_query(query, {
+            'titulo': libro,
+            'publicacion': 1997 + idx,  # Asignar año correlativo
+            'descripcion': f"Libro {idx+1} de la saga."
+        })
     conn.close()
-    print("seed ejecutado")
+    # Personajes y libros (según seed de PostgreSQL)
+    personajes = [
+        {"nombre": "Harry Potter", "rol": "estudiante", "casa": "Gryffindor", "alineacion": "bueno", "libros": libros},
+        {"nombre": "Hermione Granger", "rol": "estudiante", "casa": "Gryffindor", "alineacion": "bueno", "libros": libros[:6]},
+        {"nombre": "Ron Weasley", "rol": "estudiante", "casa": "Gryffindor", "alineacion": "bueno", "libros": libros[:5]},
+        {"nombre": "Albus Dumbledore", "rol": "profesor", "casa": "Gryffindor", "alineacion": "bueno", "libros": libros[:5]},
+        {"nombre": "Severus Snape", "rol": "profesor", "casa": "Slytherin", "alineacion": "neutral", "libros": libros[1:5]},
+        {"nombre": "Draco Malfoy", "rol": "estudiante", "casa": "Slytherin", "alineacion": "neutral", "libros": libros[1:5]},
+        {"nombre": "Minerva McGonagall", "rol": "profesor", "casa": "Gryffindor", "alineacion": "bueno", "libros": libros[:5]},
+        {"nombre": "Voldemort", "rol": "villano", "casa": "Slytherin", "alineacion": "malo", "libros": libros[3:]},
+    ]
+    for p in personajes:
+        for libro in p["libros"]:
+            crear_personaje_en_libro({
+                "nombre": p["nombre"],
+                "rol": p["rol"],
+                "casa": p["casa"],
+                "alineacion": p["alineacion"],
+                "libro": libro
+            })
+
+    # Criaturas mágicas por libro (según seed de PostgreSQL)
+    criaturas = [
+        {"nombre": "Buckbeak", "libros": ["EL PRISIONERO DE AZKABAN", "EL CÁLIZ DE FUEGO"]},
+        {"nombre": "Fawkes", "libros": ["LA CÁMARA SECRETA", "LA ORDEN DEL FÉNIX"]},
+        {"nombre": "Nagini", "libros": ["LAS RELIQUIAS DE LA MUERTE"]},
+    ]
+    for c in criaturas:
+        for libro in c["libros"]:
+            crear_criatura_en_libro({
+                "nombre": c["nombre"],
+                "libro": libro
+            })
+
+    # Objetos mágicos y asociación a libros (según seed de PostgreSQL y relaciones Posee/Aparece)
+    objetos = [
+        {"nombre": "Varita de Saúco", "descripcion": "La varita más poderosa", "tipo": "varita", "personajes": ["Harry Potter", "Albus Dumbledore"]},
+        {"nombre": "Varita de Harry", "descripcion": "Varita de acebo", "tipo": "varita", "personajes": ["Ron Weasley"]},
+        {"nombre": "Varita de Draco", "descripcion": "Varita de espino", "tipo": "varita", "personajes": ["Severus Snape", "Draco Malfoy"]},
+        {"nombre": "Capa de Invisibilidad", "descripcion": "Vuelve invisible", "tipo": "capa", "personajes": ["Harry Potter"]},
+        {"nombre": "Horcrux", "descripcion": "Fragmento de alma", "tipo": "objeto", "personajes": ["Voldemort"]},
+        {"nombre": "Giratiempos", "descripcion": "Permite viajar en el tiempo", "tipo": "objeto", "personajes": ["Hermione Granger"]},
+    ]
+    # Para cada objeto, asociarlo a los libros donde el personaje que lo posee aparece
+    personaje_libros = {p["nombre"]: p["libros"] for p in personajes}
+    for o in objetos:
+        libros_objeto = set()
+        for personaje in o["personajes"]:
+            libros_objeto.update(personaje_libros.get(personaje, []))
+        for libro in libros_objeto:
+            asociar_objeto_magico_a_libro({
+                "nombre": o["nombre"],
+                "descripcion": o["descripcion"],
+                "tipo": o["tipo"],
+                "libro": libro
+            })
+    print("Seed de Neo4j ejecutado usando solo funciones existentes y datos equivalentes a PostgreSQL.")
 
 if __name__ == "__main__":
     seed()

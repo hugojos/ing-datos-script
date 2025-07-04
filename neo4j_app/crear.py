@@ -46,9 +46,10 @@ def crear_personaje_en_libro(data):
     if not conn.connect():
         print("[Neo4j] No se pudo conectar a Neo4j")
         return
-    # Crear personaje
+    # Crear personaje (MERGE para evitar duplicados)
     query_personaje = '''
-    CREATE (p:Personaje {nombre: $nombre, rol: $rol, casa: $casa, alineacion: $alineacion})
+    MERGE (p:Personaje {nombre: $nombre})
+    SET p.rol = $rol, p.casa = $casa, p.alineacion = $alineacion
     '''
     conn.execute_query(query_personaje, {
         'nombre': data['nombre'],
@@ -56,7 +57,7 @@ def crear_personaje_en_libro(data):
         'casa': data['casa'],
         'alineacion': data['alineacion']
     })
-    # Crear relación con libro
+    # Crear relación con libro (MERGE para evitar duplicados)
     query_rel = '''
     MATCH (p:Personaje {nombre: $nombre}), (l:Libro {titulo: $libro})
     MERGE (p)-[:APARECE_EN]->(l)
