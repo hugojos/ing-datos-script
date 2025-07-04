@@ -123,9 +123,7 @@ def hechizo_lanzado_con(conn, nombre_hechizo, nombre_objeto):
 def seed():
     conn = get_neo4j_connection()
     if not conn.connect():
-        from rich.console import Console
-        from rich.panel import Panel
-        Console().print(Panel("[bold red]No se pudo conectar a Neo4j[/bold red]", title="Error"))
+        print("No se pudo conectar a Neo4j")
         return
 
     # Libros
@@ -167,9 +165,7 @@ def seed():
     hechizo_lanzado_con(conn, "Avada Kedavra", "Varita de Saúco")
 
     conn.close()
-    from rich.console import Console
-    from rich.panel import Panel
-    Console().print(Panel("[bold green]Seed de Neo4j completado.[/bold green]", title="Neo4j Seed"))
+    print("seed ejecutado")
 
 if __name__ == "__main__":
     seed()

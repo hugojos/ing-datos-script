@@ -18,13 +18,18 @@ def caso_1():
         'cantidad_personajes': {'$size': "$personajes"}
     })
     elapsed = (time.perf_counter() - start) * 1000
-    table = Table(title="Personajes por libro (MongoDB)")
+    table = Table(title="Personajes por libro")
     table.add_column("Libro", style="cyan")
     table.add_column("Cantidad de personajes", style="magenta")
+    vacio = True
     for doc in cursor:
+        vacio = False
         table.add_row(str(doc.get('titulo', '')), str(doc.get('cantidad_personajes', '')))
-    console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    if vacio:
+        console.print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        console.print(table)
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
 
 def caso_2():
     db = get_db()
@@ -36,13 +41,18 @@ def caso_2():
     ]
     cursor = db.libros.aggregate(pipeline)
     elapsed = (time.perf_counter() - start) * 1000
-    table = Table(title="Apariciones de objetos mágicos (MongoDB)")
-    table.add_column("Objeto Mágico", style="cyan")
-    table.add_column("Apariciones", style="magenta")
+    table = Table(title="Objetos mágicos por cantidad de libros")
+    table.add_column("Objeto", style="cyan")
+    table.add_column("Cantidad de libros", style="magenta")
+    vacio = True
     for doc in cursor:
+        vacio = False
         table.add_row(str(doc.get('_id', '')), str(doc.get('apariciones', '')))
-    console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    if vacio:
+        console.print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        console.print(table)
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
 
 def caso_3():
     db = get_db()
@@ -53,14 +63,19 @@ def caso_3():
         'criaturas': 1
     })
     elapsed = (time.perf_counter() - start) * 1000
-    table = Table(title="Criaturas por libro (MongoDB)")
+    table = Table(title="Criaturas por libro")
     table.add_column("Libro", style="cyan")
     table.add_column("Criaturas", style="magenta")
+    vacio = True
     for doc in cursor:
+        vacio = False
         criaturas = ', '.join([c.get('nombre', '') for c in doc.get('criaturas', [])]) if doc.get('criaturas') else '-'
         table.add_row(str(doc.get('titulo', '')), criaturas)
-    console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    if vacio:
+        console.print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        console.print(table)
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
 
 def caso_4():
     db = get_db()
@@ -76,13 +91,18 @@ def caso_4():
     ]
     cursor = db.libros.aggregate(pipeline)
     elapsed = (time.perf_counter() - start) * 1000
-    table = Table(title="Profesores que aparecen en más de 4 libros (MongoDB)")
+    table = Table(title="Profesores que aparecen en más de 4 libros")
     table.add_column("Profesor", style="cyan")
     table.add_column("Cantidad de libros", style="magenta")
+    vacio = True
     for doc in cursor:
+        vacio = False
         table.add_row(str(doc.get('_id', '')), str(doc.get('cantidad_libros', '')))
-    console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    if vacio:
+        console.print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        console.print(table)
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
 
 def caso_5():
     db = get_db()
@@ -123,11 +143,11 @@ def caso_5():
     cantidad = 0
     for doc in cursor:
         cantidad = doc.get('cantidad', 0)
-    table = Table(title="Cantidad de objetos mágicos únicos (MongoDB)")
+    table = Table(title="Cantidad de objetos mágicos únicos")
     table.add_column("Cantidad", style="magenta")
     table.add_row(str(cantidad))
     console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
 
 def caso_6():
     db = get_db()
@@ -172,9 +192,9 @@ def caso_6():
     for doc in cursor:
         hechizo = doc.get('hechizoMasUsado', '-')
         cantidad = doc.get('cantidadUsos', 0)
-    table = Table(title="Hechizo más usado por varitas (MongoDB)")
+    table = Table(title="Hechizo más usado por varitas")
     table.add_column("Hechizo", style="cyan")
     table.add_column("Cantidad de usos", style="magenta")
     table.add_row(str(hechizo), str(cantidad))
     console.print(table)
-    console.print(f"[green]Consulta MongoDB ejecutada en {elapsed:.2f} ms[/green]")
+    console.print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")

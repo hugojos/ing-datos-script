@@ -94,12 +94,19 @@ def caso_3():
     ''')
     elapsed = (time.perf_counter() - start) * 1000
     rows = cur.fetchall()
-    table = Table(title="Criaturas mencionadas en libros")
+    from rich.table import Table
+    from rich.panel import Panel
+    table = Table(title="Criaturas por libro")
     table.add_column("Libro", style="cyan")
     table.add_column("Criatura", style="magenta")
+    vacio = True
     for libro, criatura in rows:
+        vacio = False
         table.add_row(str(libro), str(criatura))
-    Console().print(table)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
     Console().print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
     cur.close()
     conn.close()
@@ -129,12 +136,19 @@ def caso_4():
     ''')
     elapsed = (time.perf_counter() - start) * 1000
     rows = cur.fetchall()
+    from rich.table import Table
+    from rich.panel import Panel
     table = Table(title="Profesores que aparecen en más de 4 libros")
     table.add_column("Profesor", style="cyan")
     table.add_column("Cantidad de libros", style="magenta")
+    vacio = True
     for nombre, cantidad in rows:
+        vacio = False
         table.add_row(str(nombre), str(cantidad))
-    Console().print(table)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
     Console().print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
     cur.close()
     conn.close()
@@ -179,7 +193,11 @@ def caso_5():
     elapsed = (time.perf_counter() - start) * 1000
     row = cur.fetchone()
     cantidad = row[0] if row else 0
-    Console().print(f"[bold cyan]Cantidad de objetos mágicos usados en el último libro o por personajes buenos: [bold magenta]{cantidad}[/bold magenta][/bold cyan]")
+    from rich.table import Table
+    table = Table(title="Cantidad de objetos mágicos únicos")
+    table.add_column("Cantidad", style="magenta")
+    table.add_row(str(cantidad))
+    Console().print(table)
     Console().print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
     cur.close()
     conn.close()
@@ -224,11 +242,17 @@ def caso_6():
     ''')
     elapsed = (time.perf_counter() - start) * 1000
     row = cur.fetchone()
+    from rich.table import Table
+    from rich.panel import Panel
     if row:
         hechizo, veces = row
-        Console().print(f"[bold cyan]Hechizo más usado por el personaje con la varita más usada: [bold magenta]{hechizo}[/bold magenta] ([bold yellow]{veces} veces[/bold yellow])[/bold cyan]")
+        table = Table(title="Hechizo más usado por varitas")
+        table.add_column("Hechizo", style="cyan")
+        table.add_column("Cantidad de usos", style="magenta")
+        table.add_row(str(hechizo), str(veces))
+        Console().print(table)
     else:
-        Console().print("[bold red]No hay datos suficientes para este caso de uso.[/bold red]")
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
     Console().print(f"[green]Consulta ejecutada en {elapsed:.2f} ms[/green]")
     cur.close()
     conn.close()

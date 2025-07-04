@@ -146,7 +146,6 @@ def seed_libros():
     db = get_db()
     db.libros.delete_many({})
     db.libros.insert_many(libros)
-    console.print(Panel("[bold green]Colección 'libros' poblada correctamente.[/bold green]", title="MongoDB Seed"))
 
 if __name__ == "__main__":
     seed_libros()

@@ -33,28 +33,28 @@ def obtener_opcion():
 import subprocess
 
 def reiniciar_dbs():
-    console.print("\n[bold yellow]Reiniciando bases de datos...[/bold yellow]")
+    print("\n------- Reiniciando bases de datos -------")
     # PostgreSQL
     try:
         subprocess.run(["py", "postgresql/reset.py"], check=True)
-        console.print("[bold green]PostgreSQL reiniciada correctamente.[/bold green]")
+        print("PostgreSQL reiniciada y poblada correctamente.")
     except Exception as e:
-        console.print(f"[bold red]Error al reiniciar PostgreSQL: {e}[/bold red]")
+        print(f"Error al reiniciar o poblar PostgreSQL: {e}")
     # MongoDB
     try:
         subprocess.run(["py", "mongo/reset.py"], check=True)
-        console.print("[bold green]MongoDB reiniciada correctamente.[/bold green]")
+        subprocess.run(["py", "mongo/seed.py"], check=True)
+        print("MongoDB reiniciada y poblada correctamente.")
     except Exception as e:
-        console.print(f"[bold red]Error al reiniciar MongoDB: {e}[/bold red]")
+        print(f"Error al reiniciar o poblar MongoDB: {e}")
     # Neo4j (reset y seed)
     try:
         subprocess.run(["py", "neo4j_app/crear.py"], check=True)
-        console.print("[bold green]Neo4j reiniciada correctamente.[/bold green]")
         subprocess.run(["py", "neo4j_app/seed.py"], check=True)
-        console.print("[bold green]Neo4j poblada con datos de ejemplo.[/bold green]")
+        # print("Neo4j reiniciada y poblada correctamente.")  # Eliminado según requerimiento
     except Exception as e:
-        console.print(f"[bold red]Error al reiniciar o poblar Neo4j: {e}[/bold red]")
-    console.input("\n[bold green]Presiona Enter para continuar...[/bold green]")
+        print(f"Error al reiniciar o poblar Neo4j: {e}")
+    input("\nPresiona Enter para continuar...")
 
 def opcion_crear():
     while True:

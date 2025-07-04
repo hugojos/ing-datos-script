@@ -12,13 +12,14 @@ console = Console()
 def reset_libros():
     db = get_db()
     db.libros.delete_many({})
-    console.print(Panel("[bold green]Colección 'libros' reseteada correctamente.[/bold green]", title="MongoDB Reset"))
+    print("------- MongoDB reset -------")
+    print("colección 'libros' reseteada")
     # Ejecutar seed.py automáticamente
     try:
         subprocess.run(["py", "mongo/seed.py"], check=True)
-        console.print(Panel("[bold green]Colección 'libros' poblada correctamente (seed.py ejecutado).[/bold green]", title="MongoDB Seed"))
+        print("seed ejecutado")
     except Exception as e:
-        console.print(Panel(f"[bold red]No se pudo ejecutar seed.py automáticamente: {e}[/bold red]", title="Error"))
+        print(f"No se pudo ejecutar seed.py automáticamente: {e}")
 
 if __name__ == "__main__":
     reset_libros()

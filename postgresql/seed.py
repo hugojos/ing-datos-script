@@ -149,7 +149,7 @@ def seed():
     conn.commit()
     cur.close()
     conn.close()
-    console.print(Panel("[bold green]Seed ejecutado correctamente.[/bold green]", title="PostgreSQL Seed"))
+    print("seed ejecutado")
 
 if __name__ == "__main__":
     seed()

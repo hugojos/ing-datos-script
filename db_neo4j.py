@@ -80,7 +80,7 @@ def crear_indices():
             for indice in indices:
                 neo4j_conn.execute_query(indice)
             
-            print("Índices creados exitosamente en Neo4j")
+            pass  # Eliminado mensaje de índices creados exitosamente
         neo4j_conn.close()
     except Exception as e:
         print(f"Error al crear índices: {e}")
@@ -92,7 +92,7 @@ def limpiar_base_datos():
         if neo4j_conn.connect():
             # Eliminar todos los nodos y relaciones
             neo4j_conn.execute_query("MATCH (n) DETACH DELETE n")
-            print("Base de datos Neo4j limpiada exitosamente")
+            # El mensaje se moverá a crear.py después de '------- Neo4j Reset -------'
         neo4j_conn.close()
     except Exception as e:
         print(f"Error al limpiar base de datos: {e}")

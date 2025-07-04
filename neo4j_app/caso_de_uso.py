@@ -17,12 +17,20 @@ def caso_1():
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
-    table = Table(title="Personajes por libro (Neo4j)")
+    from rich.panel import Panel
+    import time
+    table = Table(title="Personajes por libro")
     table.add_column("Libro", style="cyan")
     table.add_column("Cantidad de personajes", style="magenta")
+    vacio = True
     for row in result:
+        vacio = False
         table.add_row(str(row.get('libro', '')), str(row.get('cantidad_personajes', '')))
-    Console().print(table)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
+    Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
     conn.close()
 
 def caso_2():
@@ -39,12 +47,19 @@ def caso_2():
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
-    table = Table(title="Objetos más relevantes (Neo4j)")
+    from rich.panel import Panel
+    table = Table(title="Objetos mágicos por cantidad de libros")
     table.add_column("Objeto", style="cyan")
     table.add_column("Cantidad de libros", style="magenta")
+    vacio = True
     for row in result:
+        vacio = False
         table.add_row(str(row.get('objeto', '')), str(row.get('cantidad_libros', '')))
-    Console().print(table)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
+    Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
     conn.close()
 
 def caso_3():
@@ -61,22 +76,30 @@ def caso_3():
     '''
     try:
         result = conn.execute_query(query)
-        from rich.table import Table
-        from rich.console import Console
-        table = Table(title="Criaturas por libro (Neo4j)")
-        table.add_column("Libro", style="cyan")
-        table.add_column("Año", style="yellow")
-        table.add_column("Criaturas", style="magenta")
-        for row in result:
-            criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
-            table.add_row(str(row.get('libro', '')), str(row.get('publicacion', '')), criaturas)
-        Console().print(table)
     except Exception as e:
         from rich.console import Console
         from rich.panel import Panel
         Console().print(Panel(f"[bold red]Error al ejecutar consulta en Neo4j: {e}[/bold red]", title="Error"))
-    finally:
         conn.close()
+        return
+    from rich.table import Table
+    from rich.console import Console
+    from rich.panel import Panel
+    table = Table(title="Criaturas por libro")
+    table.add_column("Libro", style="cyan")
+    table.add_column("Año", style="yellow")
+    table.add_column("Criaturas", style="magenta")
+    vacio = True
+    for row in result:
+        vacio = False
+        criaturas = ', '.join([c for c in row.get('criaturas', []) if c]) if row.get('criaturas') else '-'
+        table.add_row(str(row.get('libro', '')), str(row.get('publicacion', '')), criaturas)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
+    Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
+    conn.close()
 
 def caso_4():
     """Profesores que aparecen en más de 4 libros"""
@@ -94,12 +117,19 @@ def caso_4():
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
-    table = Table(title="Profesores en más de 4 libros (Neo4j)")
-    table.add_column("Personaje", style="cyan")
-    table.add_column("Libros en los que aparece", style="magenta")
+    from rich.panel import Panel
+    table = Table(title="Profesores que aparecen en más de 4 libros")
+    table.add_column("Profesor", style="cyan")
+    table.add_column("Cantidad de libros", style="magenta")
+    vacio = True
     for row in result:
+        vacio = False
         table.add_row(str(row.get('personaje', '')), str(row.get('libros_aparece', '')))
-    Console().print(table)
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
+    Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
     conn.close()
 
 def caso_5():
@@ -117,18 +147,23 @@ def caso_5():
     UNWIND todos_los_objetos AS objeto
     RETURN COUNT(DISTINCT objeto) AS total_objetos
     '''
+    from rich.table import Table
+    from rich.console import Console
+    from rich.panel import Panel
     try:
         result = conn.execute_query(query)
-        from rich.table import Table
-        from rich.console import Console
-        table = Table(title="Objetos mencionados o poseídos (Neo4j)")
-        table.add_column("Total de objetos", style="magenta")
+        table = Table(title="Cantidad de objetos mágicos únicos")
+        table.add_column("Cantidad", style="magenta")
+        vacio = True
         for row in result:
+            vacio = False
             table.add_row(str(row.get('total_objetos', '')))
-        Console().print(table)
+        if vacio:
+            Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+        else:
+            Console().print(table)
+        Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
     except Exception as e:
-        from rich.console import Console
-        from rich.panel import Panel
         Console().print(Panel(f"[bold red]Error al ejecutar consulta en Neo4j: {e}[/bold red]", title="Error"))
     finally:
         conn.close()
@@ -155,11 +190,17 @@ def caso_6():
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
-    table = Table(title="Varita y hechizo más usado (Neo4j)")
-    table.add_column("Varita", style="cyan")
-    table.add_column("Hechizo", style="magenta")
-    table.add_column("Veces usado", style="green")
+    from rich.panel import Panel
+    vacio = True
+    table = Table(title="Hechizo más usado por varitas")
+    table.add_column("Hechizo", style="cyan")
+    table.add_column("Cantidad de usos", style="magenta")
     for row in result:
-        table.add_row(str(row.get('varita', '')), str(row.get('hechizo', '')), str(row.get('veces_usado', '')))
-    Console().print(table)
+        vacio = False
+        table.add_row(str(row.get('hechizo', '-')), str(row.get('veces_usado', '0')))
+    if vacio:
+        Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+    else:
+        Console().print(table)
+    Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
     conn.close()

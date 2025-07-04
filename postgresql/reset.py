@@ -132,7 +132,8 @@ def reset_database():
     cur.execute(f"CREATE DATABASE {DB_NAME} WITH ENCODING 'UTF8' LC_COLLATE='C.UTF-8' LC_CTYPE='C.UTF-8' TEMPLATE=template0;")
     cur.close()
     conn.close()
-    console.print(Panel(f"[bold green]Base de datos '{DB_NAME}' reseteada.[/bold green]", title="PostgreSQL Reset"))
+    print("------- PostgreSQL reset -------")
+    print(f"base de datos '{DB_NAME}' reseteada")
 
     # Conectar a la base recién creada y crear tablas
     conn2 = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
@@ -144,14 +145,14 @@ def reset_database():
     conn2.commit()
     cur2.close()
     conn2.close()
-    console.print(Panel("[bold green]Tablas creadas correctamente.[/bold green]", title="PostgreSQL Reset"))
+    print("tablas creadas")
     # Ejecutar seed.py automáticamente
     import subprocess
     try:
         subprocess.run(["py", "postgresql/seed.py"], check=True)
-        console.print(Panel("[bold green]Datos de ejemplo insertados correctamente (seed.py ejecutado).[/bold green]", title="PostgreSQL Seed"))
+        # print("seed ejecutado")  # Eliminado para evitar duplicidad
     except Exception as e:
-        console.print(Panel(f"[bold red]No se pudo ejecutar seed.py automáticamente: {e}[/bold red]", title="Error"))
+        print(f"No se pudo ejecutar seed.py automáticamente: {e}")
 
 if __name__ == "__main__":
     reset_database()
