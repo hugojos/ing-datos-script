@@ -16,7 +16,7 @@ def asociar_objeto_magico_a_libro(data):
     MERGE (o)-[:APARECE_EN]->(l)
     '''
     conn.execute_query(query_rel, {'nombre': data['nombre'], 'libro': data['libro']})
-    print(f"[Neo4j] Objeto mágico '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+    # print eliminado para evitar mensajes de log innecesarios
     conn.close()
 def crear_criatura_en_libro(data):
     """Crea una criatura mágica y la asocia a un libro en Neo4j"""
@@ -36,7 +36,7 @@ def crear_criatura_en_libro(data):
     MERGE (c)-[:MENCIONADA_EN]->(l)
     '''
     conn.execute_query(query_rel, {'nombre': data['nombre'], 'libro': data['libro']})
-    print(f"[Neo4j] Monstruo '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+    # print eliminado para evitar mensajes de log innecesarios
     conn.close()
 from db_neo4j import get_neo4j_connection
 
@@ -66,6 +66,6 @@ def crear_personaje_en_libro(data):
         'nombre': data['nombre'],
         'libro': data['libro']
     })
-    print(f"[Neo4j] Personaje '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+    # print eliminado para evitar mensajes de log innecesarios
     conn.close()
 

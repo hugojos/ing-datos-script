@@ -86,7 +86,7 @@ def seed():
                 "tipo": o["tipo"],
                 "libro": libro
             })
-    print("Seed de Neo4j ejecutado usando solo funciones existentes y datos equivalentes a PostgreSQL.")
+    print("seed ejecutado")
 
 if __name__ == "__main__":
     seed()
