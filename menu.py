@@ -72,7 +72,7 @@ def opcion_crear():
             rol = console.input("[bold green]Rol: [/bold green]").strip()
             casa = console.input("[bold green]Casa: [/bold green]").strip()
             alineacion = console.input("[bold green]Alineación: [/bold green]").strip()
-            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            libro = console.input("[bold green]Libro al que asociar: [/bold green]").strip()
         
             data = {"nombre": nombre, "rol": rol, "casa": casa, "alineacion": alineacion, "libro": libro}
             crear_personaje_mongo(data)
@@ -82,7 +82,7 @@ def opcion_crear():
             console.print("\n[bold blue][1] Personaje creado y asociado al libro en las 3 bases de datos[/bold blue]")
         elif opcion == '2':
             nombre = console.input("[bold green]Nombre del monstruo: [/bold green]").strip()
-            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            libro = console.input("[bold green]Libro al que asociar: [/bold green]").strip()
             # Limitar a 10 monstruos por libro (consultando en MongoDB)
             from db_mongo import get_db
             db = get_db()
@@ -109,7 +109,7 @@ def opcion_crear():
             nombre = console.input("[bold green]Nombre del objeto mágico: [/bold green]").strip()
             descripcion = console.input("[bold green]Descripción (opcional): [/bold green]").strip()
             tipo = console.input("[bold green]Tipo (opcional, por defecto 'general'): [/bold green]").strip() or 'general'
-            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            libro = console.input("[bold green]Libro al que asociar: [/bold green]").strip()
             data = {"nombre": nombre, "descripcion": descripcion, "tipo": tipo, "libro": libro}
             from mongo.crear import asociar_objeto_magico_a_libro as asociar_objeto_mongo
             from postgresql.crear import asociar_objeto_magico_a_libro as asociar_objeto_postgres
@@ -185,7 +185,6 @@ def opcion_casos_uso():
         console.input("\n[bold green]Presiona Enter para continuar...[/bold green]")
 
 def main():
-    console.print("[bold green]🚀 Bienvenido al menú GPT-4.1[/bold green]")
     while True:
         mostrar_menu()
         opcion = obtener_opcion()
