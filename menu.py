@@ -68,19 +68,6 @@ def opcion_crear():
         if opcion == '0':
             break
         elif opcion == '1':
-            # Mostrar títulos válidos antes de pedir el libro
-            titulos_libros = [
-                "LA PIEDRA FILOSOFAL",
-                "LA CÁMARA SECRETA",
-                "EL PRISIONERO DE AZKABAN",
-                "EL CÁLIZ DE FUEGO",
-                "LA ORDEN DEL FÉNIX",
-                "EL MISTERIO DEL PRÍNCIPE",
-                "LAS RELIQUIAS DE LA MUERTE"
-            ]
-            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
-            for t in titulos_libros:
-                console.print(f"- {t}")
             nombre = console.input("[bold green]Nombre del personaje: [/bold green]").strip()
             rol = console.input("[bold green]Rol: [/bold green]").strip()
             casa = console.input("[bold green]Casa: [/bold green]").strip()
@@ -96,18 +83,6 @@ def opcion_crear():
             crear_personaje_neo4j(data)
             console.print("\n[bold blue][1] Personaje creado y asociado al libro en las 3 bases de datos[/bold blue]")
         elif opcion == '2':
-            titulos_libros = [
-                "LA PIEDRA FILOSOFAL",
-                "LA CÁMARA SECRETA",
-                "EL PRISIONERO DE AZKABAN",
-                "EL CÁLIZ DE FUEGO",
-                "LA ORDEN DEL FÉNIX",
-                "EL MISTERIO DEL PRÍNCIPE",
-                "LAS RELIQUIAS DE LA MUERTE"
-            ]
-            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
-            for t in titulos_libros:
-                console.print(f"- {t}")
             nombre = console.input("[bold green]Nombre del monstruo: [/bold green]").strip()
             libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
             if libro not in titulos_libros:
@@ -136,18 +111,6 @@ def opcion_crear():
             crear_criatura_neo4j(data)
             console.print("\n[bold blue][2] Monstruo creado y asociado al libro en las 3 bases de datos[/bold blue]")
         elif opcion == '3':
-            titulos_libros = [
-                "LA PIEDRA FILOSOFAL",
-                "LA CÁMARA SECRETA",
-                "EL PRISIONERO DE AZKABAN",
-                "EL CÁLIZ DE FUEGO",
-                "LA ORDEN DEL FÉNIX",
-                "EL MISTERIO DEL PRÍNCIPE",
-                "LAS RELIQUIAS DE LA MUERTE"
-            ]
-            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
-            for t in titulos_libros:
-                console.print(f"- {t}")
             nombre = console.input("[bold green]Nombre del objeto mágico: [/bold green]").strip()
             descripcion = console.input("[bold green]Descripción (opcional): [/bold green]").strip()
             tipo = console.input("[bold green]Tipo (opcional, por defecto 'general'): [/bold green]").strip() or 'general'
