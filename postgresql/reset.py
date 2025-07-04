@@ -153,16 +153,17 @@ def reset_database():
         # print("seed ejecutado")  # Eliminado para evitar duplicidad
     except Exception as e:
         print(f"No se pudo ejecutar seed.py automáticamente: {e}")
-    # Sincronizar la secuencia de personaje_id_seq después del seed
+    # Sincronizar las secuencias de personaje_id_seq y criaturamagica_id_seq después del seed
     try:
         conn3 = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
         cur3 = conn3.cursor()
         cur3.execute("SELECT setval('personaje_id_seq', (SELECT COALESCE(MAX(id), 1) FROM personaje));")
+        cur3.execute("SELECT setval('criaturamagica_id_seq', (SELECT COALESCE(MAX(id), 1) FROM criaturamagica));")
         conn3.commit()
         cur3.close()
         conn3.close()
     except Exception as e:
-        print(f"Error al sincronizar la secuencia personaje_id_seq: {e}")
+        print(f"Error al sincronizar las secuencias: {e}")
 
 if __name__ == "__main__":
     reset_database()

@@ -13,11 +13,14 @@ def caso_1():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (p:Personaje)-[:APARECE_EN]->(l:Libro)
-    RETURN l.titulo AS libro, COUNT(DISTINCT p) AS cantidad_personajes
-    ORDER BY cantidad_personajes DESC
-    '''
+    # Limpieza: queries Cypher solo dentro de cadenas
+    query = (
+        """
+        MATCH (p:Personaje)-[:APARECE_EN]->(l:Libro)
+        RETURN l.titulo AS libro, COUNT(DISTINCT p) AS cantidad_personajes
+        ORDER BY cantidad_personajes DESC
+        """
+    )
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
@@ -43,11 +46,14 @@ def caso_2():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (o:CosaMagica)-[:APARECE_EN]->(l:Libro)
-    RETURN o.nombre AS objeto, COUNT(DISTINCT l) AS cantidad_libros
-    ORDER BY cantidad_libros DESC
-    '''
+    # Limpieza: queries Cypher solo dentro de cadenas
+    query = (
+        """
+        MATCH (o:CosaMagica)-[:APARECE_EN]->(l:Libro)
+        RETURN o.nombre AS objeto, COUNT(DISTINCT l) AS cantidad_libros
+        ORDER BY cantidad_libros DESC
+        """
+    )
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
@@ -72,12 +78,14 @@ def caso_3():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (l:Libro)
-    OPTIONAL MATCH (c:Criatura)-[:APARECE_EN]->(l)
-    RETURN l.titulo AS libro, COLLECT(DISTINCT c.nombre) AS criaturas
-    ORDER BY l.titulo
-    '''
+    query = (
+        """
+        MATCH (l:Libro)
+        OPTIONAL MATCH (c:CriaturaMagica)-[:MENCIONADA_EN]->(l)
+        RETURN l.titulo AS libro, COLLECT(DISTINCT c.nombre) AS criaturas
+        ORDER BY l.titulo
+        """
+    )
     try:
         result = conn.execute_query(query)
     except Exception as e:
@@ -110,13 +118,16 @@ def caso_4():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (p:Personaje)-[:APARECE_EN]->(l:Libro)
-    WHERE p.rol = 'profesor'
-    WITH p, COUNT(DISTINCT l) AS libros_aparece
-    WHERE libros_aparece > 4
-    RETURN p.nombre AS personaje, libros_aparece
-    '''
+    # Limpieza: queries Cypher solo dentro de cadenas
+    query = (
+        """
+        MATCH (p:Personaje)-[:APARECE_EN]->(l:Libro)
+        WHERE p.rol = 'profesor'
+        WITH p, COUNT(DISTINCT l) AS libros_aparece
+        WHERE libros_aparece > 4
+        RETURN p.nombre AS personaje, libros_aparece
+        """
+    )
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console
@@ -141,15 +152,50 @@ def caso_5():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (o1:CosaMagica)-[:APARECE_EN]->(:Libro {titulo: "Las Reliquias de la Muerte"})
-    WITH COLLECT(DISTINCT o1) AS objetos_del_ultimo
-    MATCH (p:Personaje {alineacion: "bueno"})-[:POSEE]->(o2:CosaMagica)
-    WITH objetos_del_ultimo, COLLECT(DISTINCT o2) AS objetos_poseidos
-    WITH objetos_del_ultimo + objetos_poseidos AS todos_los_objetos
-    UNWIND todos_los_objetos AS objeto
-    RETURN COUNT(DISTINCT objeto) AS total_objetos
-    '''
+    # Limpieza: queries Cypher solo dentro de cadenas
+    from rich.table import Table
+    from rich.console import Console
+    from rich.panel import Panel
+    query = (
+        """
+        MATCH (o1:CosaMagica)-[:APARECE_EN]->(:Libro {titulo: 'Las Reliquias de la Muerte'})
+        WITH COLLECT(DISTINCT o1) AS objetos_del_ultimo
+        MATCH (p:Personaje {alineacion: 'bueno'})-[:POSEE]->(o2:CosaMagica)
+        WITH objetos_del_ultimo, COLLECT(DISTINCT o2) AS objetos_poseidos
+        WITH objetos_del_ultimo + objetos_poseidos AS todos_los_objetos
+        UNWIND todos_los_objetos AS objeto
+        RETURN COUNT(DISTINCT objeto) AS total_objetos
+        """
+    )
+    try:
+        result = conn.execute_query(query)
+        table = Table(title="Cantidad de objetos mágicos únicos")
+        table.add_column("Cantidad", style="magenta")
+        vacio = True
+        for row in result:
+            vacio = False
+            table.add_row(str(row.get('total_objetos', '')))
+        if vacio:
+            Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
+        else:
+            Console().print(table)
+        Console().print(f"[green]Consulta ejecutada en 0.00 ms[/green]")
+    except Exception as e:
+        Console().print(Panel(f"[bold red]Error al ejecutar consulta en Neo4j: {e}[/bold red]", title="Error"))
+    finally:
+        conn.close()
+        result = conn.execute_query(query)
+    query = (
+        """
+        MATCH (o1:CosaMagica)-[:APARECE_EN]->(:Libro {titulo: 'Las Reliquias de la Muerte'})
+        WITH COLLECT(DISTINCT o1) AS objetos_del_ultimo
+        MATCH (p:Personaje {alineacion: 'bueno'})-[:POSEE]->(o2:CosaMagica)
+        WITH objetos_del_ultimo, COLLECT(DISTINCT o2) AS objetos_poseidos
+        WITH objetos_del_ultimo + objetos_poseidos AS todos_los_objetos
+        UNWIND todos_los_objetos AS objeto
+        RETURN COUNT(DISTINCT objeto) AS total_objetos
+        """
+    )
     from rich.table import Table
     from rich.console import Console
     from rich.panel import Panel
@@ -177,19 +223,21 @@ def caso_6():
     if not conn.connect():
         print("No se pudo conectar a Neo4j")
         return
-    query = '''
-    MATCH (p:Personaje)-[:POSEE]->(o:CosaMagica)
-    WHERE o.nombre CONTAINS "Varita"
-    WITH o, COUNT(DISTINCT p) AS cantidad_duenios
-    ORDER BY cantidad_duenios DESC
-    LIMIT 1
-    WITH o AS varita_elegida
-    MATCH (h:Hechizo)-[:LANZADO_CON]->(varita_elegida)
-    WITH varita_elegida, h, COUNT(*) AS veces_usado
-    ORDER BY veces_usado DESC
-    LIMIT 1
-    RETURN varita_elegida.nombre AS varita, h.nombre AS hechizo, veces_usado
-    '''
+    query = (
+        """
+        MATCH (p:Personaje)-[:POSEE]->(o:CosaMagica)
+        WHERE o.nombre CONTAINS 'Varita'
+        WITH o, COUNT(DISTINCT p) AS cantidad_duenios
+        ORDER BY cantidad_duenios DESC
+        LIMIT 1
+        WITH o AS varita_elegida
+        MATCH (h:Hechizo)-[:LANZADO_CON]->(varita_elegida)
+        WITH varita_elegida, h, COUNT(*) AS veces_usado
+        ORDER BY veces_usado DESC
+        LIMIT 1
+        RETURN varita_elegida.nombre AS varita, h.nombre AS hechizo, veces_usado
+        """
+    )
     result = conn.execute_query(query)
     from rich.table import Table
     from rich.console import Console

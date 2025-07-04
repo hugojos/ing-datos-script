@@ -60,13 +60,10 @@ def opcion_crear():
         console.print("\n[bold yellow]🔧 Has seleccionado: CREAR[/bold yellow]")
         crear_text = Text("\n¿Qué deseas crear?\n", style="bold yellow")
         crear_text.append("1. Crear nuevo personaje en libro\n", style="bold cyan")
-        crear_text.append("2. Hechizo\n", style="bold cyan")
-        crear_text.append("3. Objeto Mágico\n", style="bold cyan")
-        crear_text.append("4. Publicación\n", style="bold cyan")
-        crear_text.append("5. Criatura Mágica\n", style="bold cyan")
+        crear_text.append("2. Agregar monstruo a un libro\n", style="bold cyan")
         crear_text.append("0. Volver al menú principal\n", style="bold red")
         console.print(Panel(crear_text, title="[bold yellow]Crear[/bold yellow]", border_style="bright_blue", expand=False))
-        opcion = console.input("[bold green]\nSelecciona una opción (1-5, 0 para volver): [/bold green]").strip()
+        opcion = console.input("[bold green]\nSelecciona una opción (1, 2, 0 para volver): [/bold green]").strip()
         if opcion == '0':
             break
         elif opcion == '1':
@@ -98,25 +95,45 @@ def opcion_crear():
             crear_personaje_neo4j(data)
             console.print("\n[bold blue][1] Personaje creado y asociado al libro en las 3 bases de datos[/bold blue]")
         elif opcion == '2':
-            data = {"nombre": "Ejemplo Hechizo"}
-            crear_hechizo_mongo(data)
-            crear_hechizo_postgres(data)
-            console.print("\n[bold blue][2] Hechizo creado en las 3 bases de datos[/bold blue]")
-        elif opcion == '3':
-            data = {"nombre": "Ejemplo Objeto Mágico"}
-            crear_objeto_magico_mongo(data)
-            crear_objeto_magico_postgres(data)
-            console.print("\n[bold blue][3] Objeto Mágico creado en las 3 bases de datos[/bold blue]")
-        elif opcion == '4':
-            data = {"nombre": "Ejemplo Publicación"}
-            crear_publicacion_mongo(data)
-            crear_publicacion_postgres(data)
-            console.print("\n[bold blue][4] Publicación creada en las 3 bases de datos[/bold blue]")
-        elif opcion == '5':
-            data = {"nombre": "Ejemplo Criatura Mágica"}
+            titulos_libros = [
+                "LA PIEDRA FILOSOFAL",
+                "LA CÁMARA SECRETA",
+                "EL PRISIONERO DE AZKABAN",
+                "EL CÁLIZ DE FUEGO",
+                "LA ORDEN DEL FÉNIX",
+                "EL MISTERIO DEL PRÍNCIPE",
+                "LAS RELIQUIAS DE LA MUERTE"
+            ]
+            console.print("\n[bold yellow]Títulos válidos de libros:[/bold yellow]")
+            for t in titulos_libros:
+                console.print(f"- {t}")
+            nombre = console.input("[bold green]Nombre del monstruo: [/bold green]").strip()
+            libro = console.input("[bold green]Libro al que asociar (copia y pega exactamente): [/bold green]").strip()
+            if libro not in titulos_libros:
+                console.print("[bold red]❌ El libro no es válido. Debe coincidir exactamente con uno de los títulos mostrados.[/bold red]")
+                continue
+            # Limitar a 10 monstruos por libro (consultando en MongoDB)
+            from db_mongo import get_db
+            db = get_db()
+            libro_doc = db.libros.find_one({"titulo": libro})
+            if not libro_doc:
+                console.print(f"[bold red]❌ El libro '{libro}' no existe en MongoDB.[/bold red]")
+                continue
+            monstruos_actuales = libro_doc.get("criaturas_magicas", [])
+            if len(monstruos_actuales) >= 10:
+                console.print(f"[bold red]❌ No se pueden asociar más de 10 monstruos a un libro.[/bold red]")
+                continue
+            data = {"nombre": nombre, "libro": libro}
+            # MongoDB
+            from mongo.crear import crear_criatura_magica as crear_criatura_magica_mongo
             crear_criatura_magica_mongo(data)
+            # PostgreSQL
+            from postgresql.crear import crear_criatura_magica as crear_criatura_magica_postgres
             crear_criatura_magica_postgres(data)
-            console.print("\n[bold blue][5] Criatura Mágica creada en las 3 bases de datos[/bold blue]")
+            # Neo4j
+            from neo4j_app.crear import crear_criatura_en_libro as crear_criatura_neo4j
+            crear_criatura_neo4j(data)
+            console.print("\n[bold blue][2] Monstruo creado y asociado al libro en las 3 bases de datos[/bold blue]")
         else:
             console.print("[bold red]❌ Opción inválida. Por favor, selecciona una opción válida.[/bold red]")
         console.input("\n[bold green]Presiona Enter para continuar...[/bold green]")

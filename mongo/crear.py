@@ -25,4 +25,13 @@ def crear_publicacion(data):
     print('[MongoDB] Crear publicación:', data)
 
 def crear_criatura_magica(data):
-    print('[MongoDB] Crear criatura mágica:', data)
+    from db_mongo import get_db
+    db = get_db()
+    libro = db.libros.find_one({"titulo": data["libro"]})
+    if not libro:
+        print(f"[MongoDB] Libro '{data['libro']}' no encontrado")
+        return
+    criatura = {"nombre": data["nombre"]}
+    # Asociar criatura al libro en el campo correcto que usa el caso de uso 3
+    db.libros.update_one({"_id": libro["_id"]}, {"$push": {"criaturas": criatura}})
+    print(f"[MongoDB] Monstruo '{data['nombre']}' creado y asociado a libro '{data['libro']}' (campo 'criaturas')")

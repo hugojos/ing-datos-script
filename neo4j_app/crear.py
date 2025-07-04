@@ -1,3 +1,23 @@
+def crear_criatura_en_libro(data):
+    """Crea una criatura mágica y la asocia a un libro en Neo4j"""
+    from db_neo4j import get_neo4j_connection
+    conn = get_neo4j_connection()
+    if not conn.connect():
+        print("[Neo4j] No se pudo conectar a Neo4j")
+        return
+    # Crear criatura (si no existe)
+    query_criatura = '''
+    MERGE (c:CriaturaMagica {nombre: $nombre})
+    '''
+    conn.execute_query(query_criatura, {'nombre': data['nombre']})
+    # Crear relación con libro
+    query_rel = '''
+    MATCH (c:CriaturaMagica {nombre: $nombre}), (l:Libro {titulo: $libro})
+    MERGE (c)-[:MENCIONADA_EN]->(l)
+    '''
+    conn.execute_query(query_rel, {'nombre': data['nombre'], 'libro': data['libro']})
+    print(f"[Neo4j] Monstruo '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+    conn.close()
 from db_neo4j import get_neo4j_connection
 
 def crear_personaje_en_libro(data):

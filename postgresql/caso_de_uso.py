@@ -86,11 +86,12 @@ def caso_3():
     import time
     start = time.perf_counter()
     cur.execute('''
-        SELECT pu.titulo AS libro, cm.nombre AS criatura
+        SELECT pu.titulo AS libro, STRING_AGG(cm.nombre, ', ') AS criaturas
         FROM CriaturaMagica cm
         JOIN Mencion m ON m.criatura_id = cm.id
         JOIN Publicacion pu ON m.publicacion_id = pu.id
-        ORDER BY pu.titulo, cm.nombre
+        GROUP BY pu.titulo
+        ORDER BY pu.titulo
     ''')
     elapsed = (time.perf_counter() - start) * 1000
     rows = cur.fetchall()
@@ -98,11 +99,11 @@ def caso_3():
     from rich.panel import Panel
     table = Table(title="Criaturas por libro")
     table.add_column("Libro", style="cyan")
-    table.add_column("Criatura", style="magenta")
+    table.add_column("Criaturas", style="magenta")
     vacio = True
-    for libro, criatura in rows:
+    for libro, criaturas in rows:
         vacio = False
-        table.add_row(str(libro), str(criatura))
+        table.add_row(str(libro), str(criaturas) if criaturas else '-')
     if vacio:
         Console().print(Panel("No se encontraron resultados.", title="Sin datos", style="red"))
     else:

@@ -98,4 +98,41 @@ def crear_publicacion(data):
     print('[PostgreSQL] Crear publicación:', data)
 
 def crear_criatura_magica(data):
-    print('[PostgreSQL] Crear criatura mágica:', data)
+    import os
+    from dotenv import load_dotenv
+    import psycopg2
+    load_dotenv()
+    DB_NAME = os.getenv('POSTGRES_DB', 'harry_potter')
+    DB_USER = os.getenv('POSTGRES_USER', 'postgres')
+    DB_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'postgres')
+    DB_HOST = os.getenv('POSTGRES_HOST', 'localhost')
+    DB_PORT = os.getenv('POSTGRES_PORT', 5433)
+    try:
+        conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
+        cur = conn.cursor()
+        # Insertar criatura si no existe
+        cur.execute("SELECT id FROM criaturamagica WHERE nombre = %s", (data["nombre"],))
+        row = cur.fetchone()
+        if row:
+            criatura_id = row[0]
+        else:
+            cur.execute("INSERT INTO criaturamagica (nombre) VALUES (%s) RETURNING id", (data["nombre"],))
+            criatura_id = cur.fetchone()[0]
+        # Buscar libro
+        cur.execute("SELECT id FROM publicacion WHERE titulo = %s", (data["libro"],))
+        libro_row = cur.fetchone()
+        if not libro_row:
+            print(f"[PostgreSQL] Libro '{data['libro']}' no encontrado")
+            conn.rollback()
+            cur.close()
+            conn.close()
+            return
+        libro_id = libro_row[0]
+        # Asociar criatura al libro
+        cur.execute("INSERT INTO mencion (criatura_id, publicacion_id) VALUES (%s, %s) ON CONFLICT DO NOTHING", (criatura_id, libro_id))
+        conn.commit()
+        print(f"[PostgreSQL] Monstruo '{data['nombre']}' creado y asociado a libro '{data['libro']}'")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"[PostgreSQL] Error al crear monstruo: {e}")
