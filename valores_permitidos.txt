@@ -1,0 +1,54 @@
+Valores permitidos para los campos al crear casos de uso
+========================================================
+
+CASAS:
+- Gryffindor
+- Slytherin
+
+ROLES DE PERSONAJE:
+- estudiante
+- profesor
+- villano
+
+ALINEACIONES:
+- bueno
+- neutral
+- malo
+
+TIPOS DE OBJETO MÁGICO:
+- varita
+- capa
+- objeto
+
+LIBROS (títulos exactos):
+- LA PIEDRA FILOSOFAL
+- LA CÁMARA SECRETA
+- EL PRISIONERO DE AZKABAN
+- EL CÁLIZ DE FUEGO
+- LA ORDEN DEL FÉNIX
+- EL MISTERIO DEL PRÍNCIPE
+- LAS RELIQUIAS DE LA MUERTE
+
+CRIATURAS MÁGICAS:
+- Buckbeak
+- Fawkes
+- Nagini
+
+EJEMPLOS DE OBJETOS MÁGICOS:
+- Varita de Saúco
+- Varita de Harry
+- Varita de Draco
+- Capa de Invisibilidad
+- Horcrux
+- Giratiempos
+
+EJEMPLOS DE PERSONAJES:
+- Harry Potter
+- Hermione Granger
+- Ron Weasley
+- Albus Dumbledore
+- Severus Snape
+- Draco Malfoy
+- Minerva McGonagall
+- Voldemort
+
