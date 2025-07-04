@@ -1,13 +1,19 @@
 def crear_personaje(data):
     """Crea un personaje y lo asocia a un libro en PostgreSQL"""
+    import os
+    from dotenv import load_dotenv
     import psycopg2
+    # Cargar variables de entorno
+    load_dotenv()
+    DB_NAME = os.getenv('POSTGRES_DB', 'harry_potter')
+    DB_USER = os.getenv('POSTGRES_USER', 'postgres')
+    DB_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'postgres')
+    DB_HOST = os.getenv('POSTGRES_HOST', 'localhost')
+    DB_PORT = os.getenv('POSTGRES_PORT', 5433)
     try:
-        import psycopg2
         conn = psycopg2.connect(
-            dbname="postgres", user="postgres", password="postgres", host="localhost", port=5432
+            dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT
         )
-        # Forzar encoding UTF-8 en la conexión
-        conn.set_client_encoding('UTF8')
         print(f"[DEBUG] client_encoding: {conn.encoding}")
         cur = conn.cursor()
         # Buscar casa_id a partir del nombre de la casa (en mayúsculas)
@@ -33,7 +39,6 @@ def crear_personaje(data):
                 sql = """
                     INSERT INTO personaje (nombre, fecha_nacimiento, alineacion, rol, casa_id)
                     VALUES (%s, %s, %s, %s, %s)
-                    ON CONFLICT (nombre) DO NOTHING
                 """
                 valores = (
                     data["nombre"],
