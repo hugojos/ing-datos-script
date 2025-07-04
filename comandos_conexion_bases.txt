@@ -1,25 +1,14 @@
-Comandos para conectarse a las bases de datos desde la terminal de Windows
-==========================================================================
 
 # PostgreSQL
 psql -h localhost -p 5433 -U postgres -d harry_potter
 Contraseña: postgres
 
-# MongoDB (shell clásico)
-mongo --host localhost --port 27017 -u mongo -p mongo --authenticationDatabase admin
-
-# MongoDB (mongosh)
 mongosh --host localhost --port 27017 -u mongo -p mongo --authenticationDatabase admin
+db.libros.find()
 
-# Neo4j (Cypher Shell)
-cypher-shell -a bolt://localhost:7687 -u neo4j -p neo4j123
 
-# Neo4j (Browser web)
-Abre en tu navegador:
 http://localhost:7474
 Usuario: neo4j
 Contraseña: neo4j123
-
-Base de datos por defecto en Neo4j: harrypotter
-
-NOTA: Todos los valores corresponden a los definidos en docker-compose.yml por defecto.
+Base de datos: harrypotter
+MATCH (p:Personaje) RETURN p
